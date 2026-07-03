@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Андрей Носар · Инженерные инструменты УЭЦН</title>
+    <meta name="description" content="Инженерные веб‑инструменты для технолога УЭЦН: подбор УЭЦН, расчёт отпаек ТМПН, станции управления, калькулятор режимов. Разработки Андрея Носаря." />
+    <meta name="author" content="Андрей Носар" />
+
+    <!-- Open Graph (для соцсетей и мессенджеров) -->
+    <meta property="og:title" content="Андрей Носар · Инженерные разработки УЭЦН" />
+    <meta property="og:description" content="Три веб‑инструмента: ESP Selector, инженерный калькулятор, подбор СУ и отпаек ТМПН." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tehnologdeveng.github.io/" />
+    <meta property="og:image" content="https://tehnologdeveng.github.io/preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Favicon и мобильные иконки -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0a0e1a;
+            color: #e8edf5;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .label-sm {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #6b7a9f;
+        }
+
+        .heading-xl {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin: 0.5rem 0 0.3rem;
+            background: linear-gradient(135deg, #ffffff 60%, #7b93d0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .heading-lg {
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: #d6def0;
+            margin-bottom: 0.2rem;
+        }
+
+        .heading-md {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #d6def0;
+            margin-bottom: 0.1rem;
+        }
+
+        .text-muted {
+            color: #8e9fc7;
+        }
+
+        .text-accent {
+            color: #7b93d0;
+        }
+
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-bottom: 2.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 3rem;
+        }
+
+        .header-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #8e9fc7;
+        }
+
+        .badge-outline {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 40px;
+            padding: 0.2rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #b3c5f0;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3.5rem;
+            margin: 2.5rem 0 2rem;
+        }
+
+        /* Анимация появления карточек */
+        .project-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 1.5rem 1.5rem 1.8rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: border-color 0.2s, background 0.2s;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeUp 0.4s ease forwards;
+        }
+        .project-card:nth-child(1) { animation-delay: 0.05s; }
+        .project-card:nth-child(2) { animation-delay: 0.15s; }
+        .project-card:nth-child(3) { animation-delay: 0.25s; }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .project-card:hover {
+            border-color: rgba(63, 118, 255, 0.25);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Улучшенные кнопки-ссылки */
+        .project-card .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 1rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 40px;
+            background: rgba(63, 118, 255, 0.12);
+            border: 1px solid rgba(63, 118, 255, 0.25);
+            color: #5b8af7;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .project-card .project-link:hover {
+            background: rgba(63, 118, 255, 0.25);
+            border-color: #5b8af7;
+            color: #ffffff;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem 0.6rem;
+            margin-top: 0.5rem;
+        }
+
+        .project-tags span {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #8e9fc7;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.1rem 0.7rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .sidebar-block {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 1.5rem 1.5rem 1.8rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(2px);
+        }
+
+        .sidebar-block h3 {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #6b7a9f;
+            margin-bottom: 0.8rem;
+        }
+
+        .tech-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 40px;
+            padding: 0.2rem 0.9rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #b3c5f0;
+            margin: 0.25rem 0.25rem 0.25rem 0;
+        }
+
+        .contact-line {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.3rem 0;
+            font-size: 0.95rem;
+        }
+
+        .contact-line a {
+            color: #d6def0;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .contact-line a:hover {
+            border-bottom-color: #3f76ff;
+        }
+
+        .contact-line .icon {
+            width: 1.4rem;
+            color: #6b7a9f;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0 0;
+        }
+
+        .feature-list li {
+            padding: 0.2rem 0;
+            font-size: 0.9rem;
+            color: #b3c5f0;
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .feature-list li::before {
+            content: "▹";
+            color: #3f76ff;
+            font-size: 0.8rem;
+        }
+
+        /* Улучшенный контраст текста */
+        .project-card p {
+            color: #c9d6f2;
+        }
+
+        .footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 2rem;
+            margin-top: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            font-size: 0.85rem;
+            color: #6b7a9f;
+        }
+
+        .glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(63, 118, 255, 0.06) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Липкий сайдбар на десктопе */
+        @media (min-width: 769px) {
+            aside {
+                position: sticky;
+                top: 1.5rem;
+                align-self: start;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .heading-xl {
+                font-size: 2.6rem;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .container {
+                padding: 0.5rem 0.5rem;
+            }
+            .header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .heading-xl {
+                font-size: 2rem;
+            }
+            .badge-outline {
+                font-size: 0.7rem;
+                padding: 0.15rem 0.8rem;
+            }
+            .header-meta {
+                font-size: 0.8rem;
+                gap: 0.8rem;
+            }
+            .project-card {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow"></div>
+
+    <div class="container">
+
+        <!-- ===== HEADER ===== -->
+        <header class="header">
+            <div>
+                <div class="label-sm">Андрей Носар · Инженерные разработки УЭЦН</div>
+                <h1 class="heading-xl">Технолог<br />Разработчик</h1>
+                <div class="header-meta">
+                    <span>📍 Россия</span>
+                    <span>⏳ Ведущий инженер-технолог УЭЦН</span>
+                    <span>📁 3 инженерных продукта</span>
+                </div>
+            </div>
+            <div style="text-align: right; margin-top: 0.3rem;">
+                <span class="badge-outline">Промышленный софт</span>
+                <div style="margin-top: 0.3rem; font-size: 0.95rem; color: #8e9fc7;">Автоматизация расчётов</div>
+            </div>
+        </header>
+
+        <!-- ===== GRID ===== -->
+        <div class="grid-2">
+
+            <!-- === ЛЕВАЯ КОЛОНКА: ПРОЕКТЫ === -->
+            <section>
+                <h2 class="heading-lg">Инженерные продукты</h2>
+                <div style="margin-top: 0.3rem; color: #8e9fc7; font-size: 0.9rem; margin-bottom: 1.5rem;">
+                    Инструменты для реальной работы технолога УЭЦН
+                </div>
+
+                <!-- === ПРОЕКТ 1: ESP Selector === -->
+                <div class="project-card">
+                    <div class="heading-md">ESP Selector</div>
+                    <div style="font-size: 0.85rem; color: #8e9fc7; margin-bottom: 0.4rem;">
+                        Интеллектуальный подбор УЭЦН
+                    </div>
+                    <p>
+                        Моделирует физику процесса: законы подобия, поправку на вязкость через число Рейнольдса,
+                        энергетический баланс и температурную совместимость. Подбирает не просто насос,
+                        а сбалансированную установку: насос + ПЭД + гидрозащита + газосепаратор.
+                        <span style="color: #7b93d0;">Исключает ошибки ручного подбора.</span>
+                    </p>
+                    <ul class="feature-list">
+                        <li>Комплексный подбор всей установки</li>
+                        <li>Интерактивные графики напора, мощности, КПД</li>
+                        <li>Цветовые подсказки: норма / на границе / риск</li>
+                        <li>Экспорт графиков в PNG для отчёта</li>
+                    </ul>
+                    <a href="https://tehnologdeveng.github.io/engineering-module-for-selecting-esp/" target="_blank" class="project-link">Открыть ESP Selector →</a>
+                    <div class="project-tags">
+                        <span>УЭЦН</span>
+                        <span>Гидродинамика</span>
+                        <span>Подбор оборудования</span>
+                    </div>
+                </div>
+
+                <!-- === ПРОЕКТ 2: Инженерный калькулятор === -->
+                <div class="project-card">
+                    <div class="heading-md">Инженерный калькулятор УЭЦН</div>
+                    <div style="font-size: 0.85rem; color: #8e9fc7; margin-bottom: 0.4rem;">
+                        12 расчётных модулей для технолога
+                    </div>
+                    <p>
+                        Всё, что нужно технологу ежедневно: АПВ/ПКВ, Кпр, давление на приёме,
+                        потери в кабеле, подбор отпайки ТМПН, частотное регулирование,
+                        свободный газ, охлаждение ПЭД, глушение скважины.
+                        <span style="color: #7b93d0;">Больше не надо искать формулы в Excel.</span>
+                    </p>
+                    <ul class="feature-list">
+                        <li>12 модулей в одном интерфейсе</li>
+                        <li>Работает с телефона в поле</li>
+                        <li>Выгрузка в PDF и Excel</li>
+                        <li>Автосохранение параметров в браузере</li>
+                    </ul>
+                    <a href="https://tehnologdeveng.github.io/engineering-calculator/" target="_blank" class="project-link">Открыть калькулятор →</a>
+                    <div class="project-tags">
+                        <span>Расчёты</span>
+                        <span>Технолог</span>
+                        <span>Автоматизация</span>
+                    </div>
+                </div>
+
+                <!-- === ПРОЕКТ 3: СУ · ТМПН · Отпайка === -->
+                <div class="project-card">
+                    <div class="heading-md">СУ · ТМПН · Отпайка</div>
+                    <div style="font-size: 0.85rem; color: #8e9fc7; margin-bottom: 0.4rem;">
+                        Подбор станции управления и расчёт отпайки трансформатора
+                    </div>
+                    <p>
+                        Вводите ток и напряжение ПЭД — получаете готовую рекомендацию по СУ, ТМПН
+                        и напряжению на всех ступенях отпаек. Автоматический подбор из 40+ моделей
+                        (Триол, Электон, Борец, Новомет, Эталон) с ранжированием топ-3.
+                        <span style="color: #7b93d0;">Экономит часы при согласовании оборудования.</span>
+                    </p>
+                    <ul class="feature-list">
+                        <li>Расчёт всех четырёх ступеней отпаек</li>
+                        <li>Подбор СУ с ранжированием топ-3</li>
+                        <li>Встроенный каталог СУ и ТМПН</li>
+                        <li>Экспорт в PDF с графиками</li>
+                    </ul>
+                    <a href="https://tehnologdeveng.github.io/Transformer-Oil-filled-for-Submersible-Pumps/" target="_blank" class="project-link">Открыть модуль →</a>
+                    <div class="project-tags">
+                        <span>СУ</span>
+                        <span>ТМПН</span>
+                        <span>Отпайка</span>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- === ПРАВАЯ КОЛОНКА: ОБ АВТОРЕ === -->
+            <aside>
+
+                <div class="sidebar-block">
+                    <h3>Об авторе</h3>
+                    <p style="font-size: 0.95rem; color: #d6def0; margin-bottom: 0.3rem;">
+                        <strong>Андрей Носар</strong>
+                    </p>
+                    <p style="font-size: 0.85rem; color: #8e9fc7; margin-bottom: 0.6rem;">
+                        Ведущий инженер-технолог УЭЦН
+                    </p>
+                    <p style="font-size: 0.9rem; color: #b3c5f0;">
+                        Не программист. Практик, который автоматизирует то, чем занимается каждый день.
+                    </p>
+                </div>
+
+                <div class="sidebar-block">
+                    <h3>Экспертиза</h3>
+                    <ul class="feature-list">
+                        <li>Подбор УЭЦН и сопутствующего оборудования</li>
+                        <li>Расчёт режимов работы скважин</li>
+                        <li>Подбор станций управления и ТМПН</li>
+                        <li>Гидродинамическое моделирование</li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-block">
+                    <h3>Технологии</h3>
+                    <div>
+                        <span class="tech-tag">HTML / CSS</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">GitHub Pages</span>
+                        <span class="tech-tag">Инженерные расчёты</span>
+                        <span class="tech-tag">Гидродинамика</span>
+                        <span class="tech-tag">Техническая документация</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-block">
+                    <h3>Контакты</h3>
+                    <div class="contact-line">
+                        <span class="icon">✉</span>
+                        <!-- Замените на реальный email -->
+                        <a href="mailto:ваш-email@example.com">ваш-email@example.com</a>
+                    </div>
+                    <div class="contact-line">
+                        <span class="icon">🐙</span>
+                        <a href="https://github.com/TehnologDevEng" target="_blank">github.com/TehnologDevEng</a>
+                    </div>
+                </div>
+
+            </aside>
+
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer">
+            <span>© 2026 Андрей Носар</span>
+            <span>Инженерные разработки для нефтедобычи</span>
+        </footer>
+
+    </div>
+
+</body>
+</html>
