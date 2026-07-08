@@ -95,11 +95,11 @@
             font-weight: 500; color: #e0e6f0;
             text-shadow: 0 0 10px rgba(63, 118, 255, 0.2);
             white-space: nowrap; overflow: hidden; width: 0;
-            animation: typing 2s steps(16) forwards;
+            animation: typing 2s steps(17) forwards;
             display: inline-block; vertical-align: bottom;
         }
 
-        @keyframes typing { from { width: 0; } to { width: 16ch; } }
+        @keyframes typing { from { width: 0; } to { width: 17ch; } }
 
         .cursor { font-weight: 300; color: var(--accent-blue-light); animation: blink 1s step-end infinite; user-select: none; }
         @keyframes blink { 50% { opacity: 0; } }
@@ -156,6 +156,11 @@
         .project-card:hover {
             border-color: var(--border-accent); background: var(--bg-card-hover);
             transform: translateY(-4px); box-shadow: 0 12px 35px -10px rgba(0,0,0,0.4);
+        }
+        .project-card:focus-visible {
+            outline: 2px solid var(--accent-blue);
+            outline-offset: 4px;
+            border-radius: var(--radius-card);
         }
         .project-card::before {
             content: ''; position: absolute; top:0;left:0;right:0;bottom:0;
@@ -237,7 +242,8 @@
 
         .modal {
             background: var(--bg-primary); border: 1px solid var(--border-accent);
-            border-radius: var(--radius-card); max-width: 600px; width: 90%;
+            border-radius: var(--radius-card); max-width: 650px; width: 90%;
+            max-height: 85vh; overflow-y: auto;
             padding: 2rem; position: relative;
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
             transform: translateY(20px); transition: transform 0.3s ease;
@@ -249,6 +255,7 @@
             position: absolute; top: 1rem; right: 1.2rem;
             background: none; border: none; color: var(--text-muted);
             font-size: 1.8rem; cursor: pointer; transition: color var(--transition-smooth);
+            z-index: 10;
         }
         .modal-close:hover { color: #fff; }
 
@@ -258,6 +265,95 @@
 
         .modal-actions { margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap; }
         .modal .project-link { margin-top: 0; }
+
+        /* Вкладки */
+        .tabs {
+            display: flex; gap: 0;
+            margin: 1.2rem 0 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            padding: 0.5rem 1.2rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all var(--transition-smooth);
+            position: relative;
+        }
+        .tab-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.03);
+        }
+        .tab-btn.active {
+            color: var(--accent-blue-light);
+            border-bottom-color: var(--accent-blue-light);
+        }
+        .tab-btn:focus-visible {
+            outline: 2px solid var(--accent-blue);
+            outline-offset: -2px;
+            border-radius: 4px 4px 0 0;
+        }
+        .tab-panel {
+            display: none;
+            animation: fadeUp 0.25s ease;
+        }
+        .tab-panel.active { display: block; }
+
+        /* Инструкция */
+        .instruction-content {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        .instruction-content h3 {
+            font-family: var(--font-mono);
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 1rem 0 0.6rem;
+            font-size: 1rem;
+        }
+        .instruction-content h4 {
+            font-family: var(--font-mono);
+            font-weight: 500;
+            color: var(--text-accent);
+            margin: 1rem 0 0.4rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .instruction-content p { margin-bottom: 0.6rem; }
+        .instruction-content ul, .instruction-content ol {
+            margin-left: 1.2rem; margin-bottom: 0.8rem;
+        }
+        .instruction-content li { margin-bottom: 0.25rem; color: var(--text-secondary); }
+        .instruction-content strong { color: var(--text-primary); font-weight: 600; }
+        .instruction-content table {
+            width: 100%; border-collapse: collapse;
+            font-size: 0.8rem; font-family: var(--font-mono);
+            color: var(--text-secondary);
+            margin: 0.8rem 0 1rem;
+        }
+        .instruction-content th {
+            background: rgba(255,255,255,0.05);
+            padding: 0.5rem 0.6rem;
+            text-align: left;
+            font-weight: 500;
+            color: var(--text-accent);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .instruction-content td {
+            padding: 0.4rem 0.6rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .instruction-content tr:last-child td { border-bottom: none; }
+        .instruction-content tbody tr:hover { background: rgba(63,118,255,0.05); }
+        .instruction-content td strong { color: var(--accent-blue-light); }
 
         @media (max-width: 768px) {
             .grid-2 { grid-template-columns: 1fr; gap: 2rem; }
@@ -271,7 +367,12 @@
             .header-meta { font-size: 0.8rem; gap: 0.8rem; }
             .project-card { padding: 1rem; }
         }
-        @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+        @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; transition: none !important; }
+            .brand-name { width: auto; animation: none; }
+            .terminal-sub { opacity: 1; animation: none; }
+            .cursor { animation: none; opacity: 0; }
+        }
         :focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; border-radius: 4px; }
         .svg-icon { width: 1.2rem; height: 1.2rem; stroke: currentColor; fill: none; stroke-width: 2; vertical-align: middle; }
     </style>
@@ -285,7 +386,7 @@
                 <div class="label-sm">Андрей Носар · Инженерные разработки УЭЦН</div>
                 <h1 class="terminal-heading">
                     <span class="prompt">></span>
-                    <span class="brand-name" aria-label="nosarengineering">nosarengineering</span>
+                    <span class="brand-name" aria-label="nosar.engineering">nosar.engineering</span>
                     <span class="cursor">_</span>
                 </h1>
                 <div class="terminal-sub"><span class="prompt">></span> engineer mode activated</div>
@@ -309,11 +410,11 @@
                 </div>
 
                 <!-- Карточка 1 -->
-                <article class="project-card" data-modal="modal-esp">
+                <article class="project-card" data-modal="modal-esp" tabindex="0" role="button" aria-describedby="desc-esp">
                     <h3 class="heading-md">ESP Selector</h3>
                     <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.2rem;">Интеллектуальный подбор УЭЦН</div>
                     <div class="card-divider"></div>
-                    <p>
+                    <p id="desc-esp">
                         Моделирует физику процесса: законы подобия, поправку на вязкость через число Рейнольдса,
                         энергетический баланс и температурную совместимость. Подбирает не просто насос,
                         а сбалансированную установку: насос + ПЭД + гидрозащита + газосепаратор.
@@ -334,11 +435,11 @@
                 </article>
 
                 <!-- Карточка 2 -->
-                <article class="project-card" data-modal="modal-calc">
+                <article class="project-card" data-modal="modal-calc" tabindex="0" role="button" aria-describedby="desc-calc">
                     <h3 class="heading-md">Инженерный калькулятор УЭЦН</h3>
                     <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.2rem;"><strong class="highlight-number">12</strong> расчётных модулей для технолога</div>
                     <div class="card-divider"></div>
-                    <p>
+                    <p id="desc-calc">
                         Всё, что нужно технологу ежедневно: АПВ/ПКВ, Кпр, давление на приёме,
                         потери в кабеле, подбор отпайки ТМПН, частотное регулирование,
                         свободный газ, охлаждение ПЭД, глушение скважины.
@@ -359,11 +460,11 @@
                 </article>
 
                 <!-- Карточка 3 -->
-                <article class="project-card" data-modal="modal-tmpn">
+                <article class="project-card" data-modal="modal-tmpn" tabindex="0" role="button" aria-describedby="desc-tmpn">
                     <h3 class="heading-md">СУ · ТМПН · Отпайка</h3>
                     <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.2rem;">Подбор станции управления и расчёт отпайки трансформатора</div>
                     <div class="card-divider"></div>
-                    <p>
+                    <p id="desc-tmpn">
                         Вводите ток и напряжение ПЭД — получаете готовую рекомендацию по СУ, ТМПН
                         и напряжению на всех ступенях отпаек. Автоматический подбор из <strong class="highlight-number">40+</strong> моделей
                         (Триол, Электон, Борец, Новомет, Эталон) с ранжированием топ-3.
@@ -449,31 +550,177 @@
     </main>
 
     <!-- Модальные окна с подробным описанием -->
-    <div id="modal-esp" class="modal-overlay">
+    <div id="modal-esp" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-esp-title">
         <div class="modal">
-            <button class="modal-close" aria-label="Закрыть">&times;</button>
-            <h2>ESP Selector — интеллектуальный подбор УЭЦН</h2>
-            <p>Инструмент моделирует полную физику процесса подбора установки электроцентробежного насоса. Учитывает законы подобия, поправку на вязкость, энергетический баланс и тепловую совместимость.</p>
-            <ul class="feature-list">
-                <li>Автоматический подбор насоса, ПЭД, гидрозащиты и газосепаратора</li>
-                <li>Интерактивные графики напора, мощности и КПД</li>
-                <li>Цветовые индикаторы состояния: норма, граница, риск</li>
-                <li>Экспорт графиков в PNG для технических отчётов</li>
-                <li>Сравнение до 3 вариантов установок одновременно</li>
-                <li>Встроенная база характеристик насосов и двигателей</li>
-            </ul>
-            <div class="modal-actions">
-                <a href="https://tehnologdeveng.github.io/engineering-module-for-selecting-esp/" target="_blank" rel="noopener noreferrer" class="project-link">
-                    Открыть инструмент →
-                </a>
+            <button class="modal-close" aria-label="Закрыть окно">&times;</button>
+            <h2 id="modal-esp-title">ESP Selector — интеллектуальный подбор УЭЦН</h2>
+
+            <!-- Панель вкладок -->
+            <div class="tabs" role="tablist" aria-label="Информация о продукте">
+                <button role="tab" id="tab-overview-btn" class="tab-btn active" aria-selected="true" aria-controls="tab-overview">Обзор</button>
+                <button role="tab" id="tab-instruction-btn" class="tab-btn" aria-selected="false" aria-controls="tab-instruction" tabindex="-1">Инструкция</button>
+            </div>
+
+            <!-- Содержимое вкладки "Обзор" -->
+            <div class="tab-panel active" id="tab-overview" role="tabpanel" aria-labelledby="tab-overview-btn">
+                <p>Инструмент моделирует полную физику процесса подбора установки электроцентробежного насоса. Учитывает законы подобия, поправку на вязкость, энергетический баланс и тепловую совместимость.</p>
+                <ul class="feature-list">
+                    <li>Автоматический подбор насоса, ПЭД, гидрозащиты и газосепаратора</li>
+                    <li>Интерактивные графики напора, мощности и КПД</li>
+                    <li>Цветовые индикаторы состояния: норма, граница, риск</li>
+                    <li>Экспорт графиков в PNG для технических отчётов</li>
+                    <li>Сравнение до 3 вариантов установок одновременно</li>
+                    <li>Встроенная база характеристик насосов и двигателей</li>
+                </ul>
+                <div class="modal-actions">
+                    <a href="https://tehnologdeveng.github.io/engineering-module-for-selecting-esp/" target="_blank" rel="noopener noreferrer" class="project-link">
+                        Открыть инструмент →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Содержимое вкладки "Инструкция" -->
+            <div class="tab-panel" id="tab-instruction" role="tabpanel" aria-labelledby="tab-instruction-btn">
+                <div class="instruction-content">
+                    <h3>📘 Краткое руководство пользователя (v8.6.1)</h3>
+
+                    <h4>1. Назначение программы</h4>
+                    <p>ESP Selector — инженерный онлайн-калькулятор для подбора установок электрических центробежных насосов (УЭЦН) к нефтяным скважинам. Программа подбирает насос, погружной электродвигатель (ПЭД) и гидрозащиту, сразу показывая, насколько хорошо оборудование подходит, и предупреждая о возможных проблемах (вязкость, газ, частота, мощность).</p>
+
+                    <h4>2. Основные входные данные</h4>
+                    <ul>
+                        <li><strong>Дебит жидкости (Q)</strong> — целевой объём жидкости на устье, м³/сут.</li>
+                        <li><strong>Требуемый напор (H)</strong> — суммарный напор (можно рассчитать автоматически).</li>
+                        <li><strong>Диаметр обсадной колонны</strong> — определяет габарит насоса (2А, 3, 5, 5А, 6, 7А).</li>
+                        <li><strong>Плотность жидкости (ρ)</strong> — влияет на напор и мощность.</li>
+                        <li><strong>Вязкость (μ)</strong> — при >1,1 сП вводится поправка на характеристики насоса.</li>
+                        <li><strong>Температура на приёме</strong> — для выбора термостойкого ПЭД.</li>
+                        <li><strong>Обводнённость, газовый фактор, давление насыщения</strong> — расчёт доли свободного газа.</li>
+                        <li><strong>Частота ЧРП</strong> — рабочая частота (35–200 Гц).</li>
+                        <li><strong>Исполнение насоса</strong> — нирезист или ПКМ.</li>
+                        <li><strong>Газосепаратор</strong> — «Нет», «Газосепаратор» или «Газосепаратор-диспергатор».</li>
+                    </ul>
+
+                    <h4>3. Как работает алгоритм подбора</h4>
+                    <ol>
+                        <li><strong>Пересчёт в номинальные условия (50 Гц)</strong> через законы подобия: Q₅₀ = Q / k, H₅₀ = H / k², где k = F / 50.</li>
+                        <li><strong>Фильтрация по каталогу</strong> (~60 насосов) по габариту, исполнению, рабочей зоне.</li>
+                        <li><strong>Коррекция на вязкость</strong> (если μ > 1,1 сП) по числу Рейнольдса.</li>
+                        <li><strong>Учёт свободного газа</strong> — деградация напора, снижение газосепаратором в 4 или 10 раз.</li>
+                        <li><strong>Подбор ПЭД</strong> с запасом ≈15%, автоматически выбирается тип (асинхронный или вентильный).</li>
+                        <li><strong>Подбор гидрозащиты</strong> по осевой нагрузке.</li>
+                        <li><strong>Оценка совпадения</strong> — рейтинг 0–100 и пометка «★ Лучший выбор».</li>
+                    </ol>
+
+                    <h4>4. Как читать результаты</h4>
+                    <p>После подбора отображаются карточки насосов (до 8 вариантов) с рейтингом, параметрами, подобранным ПЭД и гидрозащитой, предупреждающими бейджами и интерактивными графиками (напор, мощность, КПД, рабочая зона). Маркер цели можно перетаскивать — дебит автоматически обновится.</p>
+
+                    <h4>5. Основные возможности</h4>
+                    <ul>
+                        <li>Автоматический расчёт напора по глубине спуска и давлениям.</li>
+                        <li>Реалистичные поправки на вязкость и свободный газ.</li>
+                        <li>Частотное регулирование 35–200 Гц с автоматическим выбором вентильного ПЭД.</li>
+                        <li>Цветовая обратная связь на карточках (зелёный/оранжевый/красный).</li>
+                        <li>Сравнение выбранных вариантов в таблице.</li>
+                        <li>Интерактивные графики с экспортом в PNG.</li>
+                        <li>Сохранение/загрузка конфигураций в браузере.</li>
+                        <li>Печать отчёта.</li>
+                        <li>Валидация полей и тёмная/светлая тема.</li>
+                    </ul>
+
+                    <h4>6. Типичный сценарий работы</h4>
+                    <ol>
+                        <li>Введите дебит, плотность, вязкость.</li>
+                        <li>Выберите диаметр обсадной колонны.</li>
+                        <li>Включите автоматический расчёт напора, заполните глубины и давления.</li>
+                        <li>При наличии газа укажите газовый фактор и тип сепаратора.</li>
+                        <li>Установите частоту и исполнение насоса.</li>
+                        <li>Нажмите «Подобрать оборудование».</li>
+                        <li>Оцените лучший вариант, при необходимости сравните и уточните дебит на графике.</li>
+                        <li>Сохраните конфигурацию или распечатайте отчёт.</li>
+                    </ol>
+
+                    <h4>🎯 Как определяется «Лучший выбор»</h4>
+                    <p>Score = A + B. A — попадание в рабочую зону (60 если внутри, 20 если нет). B — близость номинальной подачи к целевому дебиту (до 30 баллов). Итоговый балл до 100. Насос с максимальным счётом получает плашку «★ Лучший выбор».</p>
+
+                    <h4>📊 Примеры расчёта балла</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Насос</th>
+                                <th>q<sub>min</sub></th>
+                                <th>q<sub>50</sub></th>
+                                <th>q<sub>max</sub></th>
+                                <th>Q в зоне?</th>
+                                <th>A</th>
+                                <th>Расстояние до q<sub>50</sub></th>
+                                <th>B</th>
+                                <th>Итого</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Насос 1 (идеал)</td>
+                                <td>70</td>
+                                <td>80</td>
+                                <td>95</td>
+                                <td>✅</td>
+                                <td>60</td>
+                                <td>0</td>
+                                <td>30</td>
+                                <td><strong>100</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Насос 2</td>
+                                <td>50</td>
+                                <td>75</td>
+                                <td>90</td>
+                                <td>✅</td>
+                                <td>60</td>
+                                <td>5</td>
+                                <td>28</td>
+                                <td>88</td>
+                            </tr>
+                            <tr>
+                                <td>Насос 3</td>
+                                <td>85</td>
+                                <td>100</td>
+                                <td>120</td>
+                                <td>❌</td>
+                                <td>20</td>
+                                <td>20</td>
+                                <td>24</td>
+                                <td>44</td>
+                            </tr>
+                            <tr>
+                                <td>Насос 4 (граница)</td>
+                                <td>60</td>
+                                <td>90</td>
+                                <td>110</td>
+                                <td>✅</td>
+                                <td>60</td>
+                                <td>10</td>
+                                <td>26.7</td>
+                                <td>87</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>⚠️ Важные нюансы</h4>
+                    <ul>
+                        <li>Score — чисто гидравлическая оценка, без учёта стоимости и энергопотребления.</li>
+                        <li>Выход за рабочую зону резко снижает балл, такой насос не станет лучшим.</li>
+                        <li>При вязкости и газе номинальные характеристики корректируются, рейтинг остаётся честным.</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="modal-calc" class="modal-overlay">
+    <div id="modal-calc" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-calc-title">
         <div class="modal">
-            <button class="modal-close" aria-label="Закрыть">&times;</button>
-            <h2>Инженерный калькулятор УЭЦН</h2>
+            <button class="modal-close" aria-label="Закрыть окно">&times;</button>
+            <h2 id="modal-calc-title">Инженерный калькулятор УЭЦН</h2>
             <p>12 расчётных модулей, закрывающих ежедневные задачи технолога: от определения давления на приёме до подбора отпайки ТМПН и расчёта потерь в кабеле.</p>
             <ul class="feature-list">
                 <li>АПВ / ПКВ, коэффициент продуктивности</li>
@@ -495,10 +742,10 @@
         </div>
     </div>
 
-    <div id="modal-tmpn" class="modal-overlay">
+    <div id="modal-tmpn" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-tmpn-title">
         <div class="modal">
-            <button class="modal-close" aria-label="Закрыть">&times;</button>
-            <h2>Подбор СУ · ТМПН · Отпайка</h2>
+            <button class="modal-close" aria-label="Закрыть окно">&times;</button>
+            <h2 id="modal-tmpn-title">Подбор СУ · ТМПН · Отпайка</h2>
             <p>Профессиональный модуль для подбора станции управления и трансформатора. Автоматически рассчитывает все четыре ступени отпаек и ранжирует топ-3 модели СУ из встроенного каталога.</p>
             <ul class="feature-list">
                 <li>Расчёт напряжения на всех ступенях отпаек ТМПН</li>
@@ -518,44 +765,116 @@
 
     <script>
         (function() {
-            // Открытие модального окна по клику на карточку
             const cards = document.querySelectorAll('.project-card[data-modal]');
             const overlays = document.querySelectorAll('.modal-overlay');
+            let lastActiveElement = null;
+
+            function openModal(overlay) {
+                if (!overlay) return;
+                lastActiveElement = document.activeElement;
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                const focusable = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                if (focusable.length) {
+                    const activeTab = overlay.querySelector('.tab-btn.active');
+                    if (activeTab) activeTab.focus();
+                    else focusable[0].focus();
+                }
+                trapFocus(overlay);
+            }
+
+            function closeModal(overlay) {
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                if (lastActiveElement) lastActiveElement.focus();
+                lastActiveElement = null;
+            }
+
+            function trapFocus(overlay) {
+                overlay.addEventListener('keydown', function(e) {
+                    if (e.key === 'Tab') {
+                        const focusable = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                        const first = focusable[0];
+                        const last = focusable[focusable.length - 1];
+                        if (e.shiftKey && document.activeElement === first) {
+                            e.preventDefault();
+                            last.focus();
+                        } else if (!e.shiftKey && document.activeElement === last) {
+                            e.preventDefault();
+                            first.focus();
+                        }
+                    }
+                });
+            }
 
             cards.forEach(card => {
                 card.addEventListener('click', function(e) {
-                    // если клик по ссылке — не открываем (уже обработано stopPropagation)
+                    if (e.target.closest('a')) return;
                     const modalId = this.getAttribute('data-modal');
-                    const overlay = document.getElementById(modalId);
-                    if (overlay) {
-                        overlay.classList.add('active');
-                        document.body.style.overflow = 'hidden';
+                    openModal(document.getElementById(modalId));
+                });
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const modalId = this.getAttribute('data-modal');
+                        openModal(document.getElementById(modalId));
                     }
                 });
             });
 
-            // Закрытие по кнопке, по клику вне модала, по Escape
             overlays.forEach(overlay => {
                 overlay.addEventListener('click', function(e) {
-                    if (e.target === this || e.target.classList.contains('modal-close')) {
-                        this.classList.remove('active');
-                        document.body.style.overflow = '';
+                    if (e.target === overlay || e.target.classList.contains('modal-close')) {
+                        closeModal(overlay);
                     }
                 });
             });
 
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
-                    overlays.forEach(o => {
-                        if (o.classList.contains('active')) {
-                            o.classList.remove('active');
-                            document.body.style.overflow = '';
-                        }
+                    overlays.forEach(overlay => {
+                        if (overlay.classList.contains('active')) closeModal(overlay);
                     });
                 }
             });
+
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetPanel = document.getElementById(btn.getAttribute('aria-controls'));
+                    tabButtons.forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-selected', 'false');
+                        b.setAttribute('tabindex', '-1');
+                    });
+                    tabPanels.forEach(p => p.classList.remove('active'));
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-selected', 'true');
+                    btn.setAttribute('tabindex', '0');
+                    targetPanel.classList.add('active');
+                });
+
+                btn.addEventListener('keydown', function(e) {
+                    const buttons = Array.from(tabButtons);
+                    let index = buttons.indexOf(this);
+                    if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        index = (index + 1) % buttons.length;
+                        buttons[index].focus();
+                        buttons[index].click();
+                    } else if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        index = (index - 1 + buttons.length) % buttons.length;
+                        buttons[index].focus();
+                        buttons[index].click();
+                    }
+                });
+            });
+
+            console.log('🛠️ Engineer mode v1.0.4 | Modal + tabs + a11y | nosar.engineering');
         })();
-        console.log('🛠️ Engineer mode v1.0.3 | Modal windows active');
     </script>
 </body>
 </html>
