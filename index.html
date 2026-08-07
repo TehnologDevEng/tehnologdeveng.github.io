@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Андрей Носар · Инженерные инструменты УЭЦН</title>
-    <meta name="description" content="Инженерные веб‑инструменты для технолога УЭЦН: подбор УЭЦН, расчёт отпаек ТМПН, станции управления, калькулятор режимов. Разработки Андрея Носаря." />
+    <title>Андрей Носар — Инженерные инструменты УЭЦН</title>
+    <meta name="description" content="Инженерные веб-инструменты для технолога УЭЦН: подбор УЭЦН, расчёт отпаек ТМПН, станции управления, калькулятор режимов." />
     <meta name="author" content="Андрей Носар" />
     <meta name="date" content="2026-07-04" />
     <link rel="canonical" href="https://tehnologdeveng.github.io/" />
 
-    <meta property="og:title" content="Андрей Носар · Инженерные разработки УЭЦН" />
-    <meta property="og:description" content="Три веб‑инструмента: ESP Selector, инженерный калькулятор, подбор СУ и отпаек ТМПН." />
+    <meta property="og:title" content="Андрей Носар — Инженерные разработки УЭЦН" />
+    <meta property="og:description" content="ESP Selector, инженерный калькулятор, подбор СУ и отпаек ТМПН." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://tehnologdeveng.github.io/" />
     <meta property="og:image" content="https://tehnologdeveng.github.io/preview.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
     <script type="application/ld+json">
     {
@@ -33,538 +31,975 @@
     }
     </script>
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-
     <style>
         :root {
-            --bg-primary: #0a0e1a;
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --bg-card-hover: rgba(255, 255, 255, 0.05);
-            --border-subtle: rgba(255, 255, 255, 0.06);
-            --border-accent: rgba(63, 118, 255, 0.25);
-            --text-primary: #e8edf5;
-            --text-secondary: #d4ddf5;
-            --text-muted: #8e9fc7;
-            --text-accent: #7b93d0;
-            --accent-blue: #3f76ff;
-            --accent-blue-light: #5b8af7;
-            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Monaco, 'Courier New', monospace;
-            --radius-card: 16px;
-            --radius-pill: 40px;
-            --transition-smooth: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg: #0c0f17;
+            --bg-elevated: #131824;
+            --bg-surface: #1a1f2e;
+            --border: rgba(148, 163, 184, 0.08);
+            --border-hover: rgba(148, 163, 184, 0.15);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-tertiary: #64748b;
+            --accent: #3b82f6;
+            --accent-hover: #60a5fa;
+            --accent-muted: rgba(59, 130, 246, 0.1);
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Monaco, monospace;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        html { scroll-behavior: smooth; }
+
         body {
             font-family: var(--font-sans);
-            background: var(--bg-primary);
+            background: var(--bg);
             color: var(--text-primary);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
-            padding: 2rem 1.5rem;
             min-height: 100vh;
+        }
+
+        .page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .site-header {
+            padding: 3rem 0 2.5rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 3rem;
+        }
+
+        .header-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .header-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .header-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .header-title span {
+            color: var(--accent);
+        }
+
+        .header-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 540px;
+            line-height: 1.5;
+        }
+
+        .header-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.25rem;
+            flex-wrap: wrap;
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        .header-meta span {
             display: flex;
             align-items: center;
-            position: relative;
-            overflow-x: hidden;
+            gap: 0.4rem;
         }
 
-        .container { max-width: 1100px; margin: 0 auto; width: 100%; }
-
-        .label-sm {
-            font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
-            text-transform: uppercase; color: #6b7a9f;
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: var(--accent-muted);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--accent-hover);
+            white-space: nowrap;
         }
 
-        .terminal-heading {
+        .status-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .section-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .section-desc {
+            font-size: 0.9rem;
+            color: var(--text-tertiary);
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .metric:hover {
+            border-color: var(--border-hover);
+        }
+
+        .metric-value {
             font-family: var(--font-mono);
-            font-size: clamp(1.5rem, 4.5vw, 2.2rem);
-            font-weight: 400; line-height: 1.3;
-            margin: 0.5rem 0 0.3rem; color: #e0e6f0;
-            display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem;
+            font-size: 1.75rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 0.4rem;
         }
 
-        .prompt { color: var(--accent-blue-light); font-weight: 500; user-select: none; }
-
-        .brand-name {
-            font-weight: 500; color: #e0e6f0;
-            text-shadow: 0 0 10px rgba(63, 118, 255, 0.2);
-            white-space: nowrap; overflow: hidden; width: 0;
-            animation: typing 2s steps(17) forwards;
-            display: inline-block; vertical-align: bottom;
+        .metric-value span {
+            color: var(--accent);
         }
 
-        @keyframes typing { from { width: 0; } to { width: 17ch; } }
-
-        .cursor { font-weight: 300; color: var(--accent-blue-light); animation: blink 1s step-end infinite; user-select: none; }
-        @keyframes blink { 50% { opacity: 0; } }
-
-        .terminal-sub {
-            font-family: var(--font-mono); font-size: 0.8rem; color: #6b7a9f;
-            margin-top: 0.2rem; opacity: 0;
-            animation: fadeIn 0.5s ease 2.5s forwards;
-            display: flex; align-items: center; gap: 0.4rem;
-        }
-        @keyframes fadeIn { to { opacity: 1; } }
-        .terminal-sub .prompt { font-size: 0.8rem; color: #6b7a9f; }
-
-        .heading-lg {
-            font-size: 1.3rem; font-weight: 600; letter-spacing: -0.01em;
-            color: #d6def0; margin-bottom: 0.2rem;
-        }
-        .heading-md { font-size: 1.1rem; font-weight: 600; color: #d6def0; margin-bottom: 0.1rem; }
-        .text-muted { color: var(--text-muted); }
-        .text-accent { color: var(--text-accent); }
-
-        .header {
-            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;
-            padding-bottom: 2.5rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 3rem;
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            line-height: 1.4;
         }
 
-        .header-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-muted); }
-
-        .badge-outline {
-            border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-pill);
-            padding: 0.2rem 1.2rem; font-size: 0.8rem; font-weight: 500; color: #b3c5f0;
-            display: inline-flex; align-items: center; gap: 0.4rem;
-            background: rgba(255,255,255,0.03); backdrop-filter: blur(5px);
-            transition: all var(--transition-smooth);
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 3rem;
+            margin-bottom: 3rem;
         }
-        .badge-outline::before {
-            content: ''; display: inline-block; width: 6px; height: 6px;
-            background: #5b8af7; border-radius: 50%; animation: pulse-dot 2s infinite;
+
+        .projects {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
-        @keyframes pulse-dot { 0%,100%{opacity:0.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.2)} }
-        .badge-outline:hover { background: rgba(63,118,255,0.1); border-color: rgba(63,118,255,0.4); }
 
-        .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 3.5rem; margin: 2.5rem 0 2rem; }
-
-        .project-card {
-            background: var(--bg-card); border-radius: var(--radius-card);
-            padding: 1.5rem 1.5rem 1.8rem; margin-bottom: 1.5rem;
-            border: 1px solid var(--border-subtle); transition: all var(--transition-smooth);
-            opacity: 0; transform: translateY(10px);
-            animation: fadeUp 0.4s ease forwards; backdrop-filter: blur(2px);
-            position: relative; will-change: transform;
+        .project {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
             cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .project-card:hover {
-            border-color: var(--border-accent); background: var(--bg-card-hover);
-            transform: translateY(-4px); box-shadow: 0 12px 35px -10px rgba(0,0,0,0.4);
-        }
-        .project-card:focus-visible {
-            outline: 2px solid var(--accent-blue);
-            outline-offset: 4px;
-            border-radius: var(--radius-card);
-        }
-        .project-card::before {
-            content: ''; position: absolute; top:0;left:0;right:0;bottom:0;
-            border-radius: var(--radius-card);
-            background: radial-gradient(circle at top left, rgba(63,118,255,0.08), transparent 70%);
-            opacity: 0; transition: opacity var(--transition-smooth); pointer-events: none;
-        }
-        .project-card:hover::before { opacity: 1; }
-        .project-card:nth-child(1) { animation-delay: 0.05s; }
-        .project-card:nth-child(2) { animation-delay: 0.15s; }
-        .project-card:nth-child(3) { animation-delay: 0.25s; }
 
-        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        .project::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
 
-        .card-divider { height: 1px; background: var(--border-subtle); margin: 0.8rem 0; width: 100%; }
+        .project:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-surface);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .project:hover::before {
+            opacity: 1;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-title-group {
+            flex: 1;
+        }
+
+        .project-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.15rem;
+        }
+
+        .project-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+        }
+
+        .project-status {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.2rem 0.6rem;
+            border-radius: 100px;
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(34, 197, 94, 0.15);
+            white-space: nowrap;
+        }
+
+        .project-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .project-features {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.35rem 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .project-features li {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-features li::before {
+            content: '—';
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .project-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
 
         .project-link {
-            display: inline-flex; align-items: center; gap: 0.3rem;
-            margin-top: 0.8rem; padding: 0.35rem 0.8rem;
-            border-radius: var(--radius-pill); background: rgba(63,118,255,0.12);
-            border: 1px solid var(--border-accent); color: var(--accent-blue-light);
-            text-decoration: none; font-size: 0.85rem; font-weight: 500;
-            transition: all var(--transition-smooth); position: relative; z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
         }
+
         .project-link:hover {
-            background: rgba(63,118,255,0.25); border-color: var(--accent-blue-light);
-            color: #fff; box-shadow: 0 0 20px rgba(63,118,255,0.3);
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
         }
 
-        .project-tags { display: flex; flex-wrap: wrap; gap: 0.3rem 0.6rem; margin-top: 0.8rem; }
-        .project-tags span {
-            font-size: 0.7rem; font-weight: 500; color: var(--text-muted);
-            background: rgba(255,255,255,0.05); padding: 0.1rem 0.7rem;
-            border-radius: var(--radius-pill); border: 1px solid var(--border-subtle);
-            transition: all var(--transition-smooth);
+        .project-link::after {
+            content: '→';
+            transition: transform 0.2s ease;
         }
-        .project-tags span:hover { background: rgba(63,118,255,0.1); border-color: rgba(63,118,255,0.3); color: var(--text-primary); }
 
-        .project-card p { color: var(--text-secondary); }
-        .highlight-number { font-weight: 600; color: #d6def0; font-size: 1.05em; }
+        .project-link:hover::after {
+            transform: translateX(2px);
+        }
 
-        /* Sidebar */
-        .sidebar-block { background: rgba(255,255,255,0.04); border-radius: var(--radius-card); padding: 1.5rem 1.5rem 1.8rem; margin-bottom: 1.5rem; border: 1px solid var(--border-subtle); backdrop-filter: blur(2px); }
-        .sidebar-block:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
-        .sidebar-block h3 { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6b7a9f; margin-bottom: 0.8rem; }
+        .project-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
 
-        .tech-tag { display: inline-block; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-pill); padding: 0.2rem 0.9rem; font-size: 0.8rem; font-weight: 500; color: #b3c5f0; margin: 0.25rem 0.25rem 0.25rem 0; transition: all var(--transition-smooth); cursor: default; }
-        .tech-tag:hover { background: rgba(63,118,255,0.15); border-color: rgba(63,118,255,0.3); color: #fff; }
+        .tag {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            background: rgba(148, 163, 184, 0.06);
+            padding: 0.2rem 0.6rem;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+        }
 
-        .contact-line { display: flex; align-items: center; gap: 0.6rem; padding: 0.3rem 0; font-size: 0.95rem; transition: transform var(--transition-smooth); }
-        .contact-line:hover { transform: translateX(3px); }
-        .contact-line a { color: #d6def0; text-decoration: none; border-bottom: 1px solid transparent; transition: all var(--transition-smooth); }
-        .contact-line a:hover { border-bottom-color: var(--accent-blue); color: #fff; }
-        .contact-line .icon { width: 1.4rem; display: flex; align-items: center; justify-content: center; color: #6b7a9f; transition: color var(--transition-smooth); }
-        .contact-line:hover .icon { color: var(--accent-blue-light); }
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
 
-        .feature-list { list-style: none; padding: 0; margin: 0.5rem 0 0; }
-        .feature-list li { padding: 0.2rem 0; font-size: 0.9rem; color: #b3c5f0; display: flex; align-items: baseline; gap: 0.5rem; transition: transform var(--transition-smooth); }
-        .feature-list li:hover { transform: translateX(2px); color: var(--text-primary); }
-        .feature-list li::before { content: "▹"; color: var(--accent-blue); font-size: 0.8rem; }
+        .sidebar-block {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+        }
 
-        .footer { border-top: 1px solid var(--border-subtle); padding-top: 2rem; margin-top: 2.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; font-size: 0.85rem; color: #6b7a9f; }
-        .footer-links { display: flex; gap: 1.2rem; align-items: center; }
-        .footer-links a { color: #8e9fc7; text-decoration: none; transition: color var(--transition-smooth); }
-        .footer-links a:hover { color: var(--text-primary); }
+        .sidebar-block h3 {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-tertiary);
+            margin-bottom: 0.75rem;
+        }
 
-        .glow { position: fixed; width: 600px; height: 600px; background: radial-gradient(circle, rgba(63,118,255,0.06) 0%, transparent 70%); top: -200px; right: -200px; pointer-events: none; z-index: -1; animation: pulse 8s ease-in-out infinite; }
-        @keyframes pulse { 0%,100%{opacity:0.8} 50%{opacity:1} }
+        .author-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.15rem;
+        }
 
-        /* Модальное окно */
+        .author-role {
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .author-bio {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .expertise-list {
+            list-style: none;
+        }
+
+        .expertise-list li {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 0.35rem 0;
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .expertise-list li:last-child {
+            border-bottom: none;
+        }
+
+        .expertise-list li::before {
+            content: '▸';
+            color: var(--accent);
+            font-size: 0.75rem;
+        }
+
+        .tech-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .tech-tag {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: rgba(148, 163, 184, 0.06);
+            padding: 0.25rem 0.7rem;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .tech-tag:hover {
+            border-color: var(--accent);
+            color: var(--accent-hover);
+            background: var(--accent-muted);
+        }
+
+        .contact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.85rem;
+        }
+
+        .contact-item a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+            border-bottom: 1px solid transparent;
+        }
+
+        .contact-item a:hover {
+            color: var(--text-primary);
+            border-bottom-color: var(--accent);
+        }
+
+        .contact-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: var(--text-tertiary);
+            flex-shrink: 0;
+        }
+
+        .site-footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-tertiary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
         .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 1000; opacity: 0; visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s ease;
+            padding: 1.5rem;
         }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
 
         .modal {
-            background: var(--bg-primary); border: 1px solid var(--border-accent);
-            border-radius: var(--radius-card); max-width: 650px; width: 90%;
-            max-height: 85vh; overflow-y: auto;
-            padding: 2rem; position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            transform: translateY(20px); transition: transform 0.3s ease;
-            font-family: var(--font-sans);
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-hover);
+            border-radius: var(--radius);
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(8px);
+            transition: transform 0.25s ease;
         }
-        .modal-overlay.active .modal { transform: translateY(0); }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.5rem 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
 
         .modal-close {
-            position: absolute; top: 1rem; right: 1.2rem;
-            background: none; border: none; color: var(--text-muted);
-            font-size: 1.8rem; cursor: pointer; transition: color var(--transition-smooth);
-            z-index: 10;
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            line-height: 1;
+            transition: color 0.2s ease;
+            flex-shrink: 0;
         }
-        .modal-close:hover { color: #fff; }
 
-        .modal h2 { font-family: var(--font-mono); font-weight: 500; margin-bottom: 1rem; color: #e0e6f0; }
-        .modal p { color: var(--text-secondary); margin-bottom: 1rem; }
-        .modal .feature-list li { font-size: 0.95rem; margin-bottom: 0.3rem; }
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
 
-        .modal-actions { margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap; }
-        .modal .project-link { margin-top: 0; }
+        .modal-body {
+            padding: 1rem 1.5rem 1.5rem;
+        }
 
-        /* Вкладки */
+        .modal-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .modal-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-features li {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding: 0.3rem 0;
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .modal-features li::before {
+            content: '—';
+            color: var(--accent);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .modal-actions .project-link {
+            padding: 0.6rem 1.25rem;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+            background: rgba(148, 163, 184, 0.05);
+        }
+
         .tabs {
-            display: flex; gap: 0;
-            margin: 1.2rem 0 1rem;
-            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            gap: 0;
+            margin: 1rem 0;
+            border-bottom: 1px solid var(--border);
+            padding: 0 1.5rem;
         }
+
         .tab-btn {
             background: transparent;
             border: none;
-            color: var(--text-muted);
+            color: var(--text-tertiary);
             font-family: var(--font-mono);
             font-size: 0.8rem;
             font-weight: 500;
-            letter-spacing: 0.03em;
-            padding: 0.5rem 1.2rem;
+            padding: 0.6rem 1rem;
             cursor: pointer;
             border-bottom: 2px solid transparent;
-            transition: all var(--transition-smooth);
-            position: relative;
+            margin-bottom: -1px;
+            transition: all 0.2s ease;
         }
+
         .tab-btn:hover {
-            color: var(--text-primary);
-            background: rgba(255,255,255,0.03);
+            color: var(--text-secondary);
         }
+
         .tab-btn.active {
-            color: var(--accent-blue-light);
-            border-bottom-color: var(--accent-blue-light);
+            color: var(--accent);
+            border-bottom-color: var(--accent);
         }
-        .tab-btn:focus-visible {
-            outline: 2px solid var(--accent-blue);
-            outline-offset: -2px;
-            border-radius: 4px 4px 0 0;
-        }
+
         .tab-panel {
             display: none;
-            animation: fadeUp 0.25s ease;
+            padding: 0 1.5rem 1.5rem;
         }
-        .tab-panel.active { display: block; }
 
-        /* Инструкция */
+        .tab-panel.active {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .instruction-content {
             font-size: 0.9rem;
             line-height: 1.7;
             color: var(--text-secondary);
         }
+
         .instruction-content h3 {
-            font-family: var(--font-mono);
-            font-weight: 500;
-            color: var(--text-primary);
-            margin: 1rem 0 0.6rem;
             font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 1.25rem 0 0.5rem;
         }
+
         .instruction-content h4 {
-            font-family: var(--font-mono);
-            font-weight: 500;
-            color: var(--text-accent);
-            margin: 1rem 0 0.4rem;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
             text-transform: uppercase;
             letter-spacing: 0.04em;
+            margin: 1rem 0 0.4rem;
         }
+
         .instruction-content p { margin-bottom: 0.6rem; }
         .instruction-content ul, .instruction-content ol {
-            margin-left: 1.2rem; margin-bottom: 0.8rem;
+            margin-left: 1.2rem;
+            margin-bottom: 0.8rem;
         }
-        .instruction-content li { margin-bottom: 0.25rem; color: var(--text-secondary); }
+        .instruction-content li { margin-bottom: 0.25rem; }
         .instruction-content strong { color: var(--text-primary); font-weight: 600; }
         .instruction-content table {
-            width: 100%; border-collapse: collapse;
-            font-size: 0.8rem; font-family: var(--font-mono);
-            color: var(--text-secondary);
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            font-family: var(--font-mono);
             margin: 0.8rem 0 1rem;
         }
         .instruction-content th {
-            background: rgba(255,255,255,0.05);
+            background: var(--bg-surface);
             padding: 0.5rem 0.6rem;
             text-align: left;
             font-weight: 500;
-            color: var(--text-accent);
-            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
         }
         .instruction-content td {
             padding: 0.4rem 0.6rem;
-            border-bottom: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
         }
         .instruction-content tr:last-child td { border-bottom: none; }
-        .instruction-content tbody tr:hover { background: rgba(63,118,255,0.05); }
-        .instruction-content td strong { color: var(--accent-blue-light); }
+        .instruction-content tbody tr:hover { background: rgba(59, 130, 246, 0.04); }
 
-        @media (max-width: 768px) {
-            .grid-2 { grid-template-columns: 1fr; gap: 2rem; }
-            .container { padding: 0.5rem; }
-            .header { flex-direction: column; gap: 0.5rem; }
-            body { padding: 1.5rem 1rem; }
+        @media (max-width: 900px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+            .metrics { grid-template-columns: repeat(2, 1fr); }
+            .header-grid { grid-template-columns: 1fr; }
         }
-        @media (max-width: 420px) {
-            .terminal-heading { font-size: 1.5rem; }
-            .badge-outline { font-size: 0.7rem; padding: 0.15rem 0.8rem; }
-            .header-meta { font-size: 0.8rem; gap: 0.8rem; }
-            .project-card { padding: 1rem; }
+
+        @media (max-width: 600px) {
+            .page { padding: 0 1rem; }
+            .site-header { padding: 2rem 0 1.5rem; }
+            .metrics { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+            .metric { padding: 1rem; }
+            .metric-value { font-size: 1.4rem; }
+            .project-features { grid-template-columns: 1fr; }
+            .project-footer { flex-direction: column; align-items: flex-start; }
+            .tabs { padding: 0 1rem; }
+            .modal-header, .modal-body { padding-left: 1rem; padding-right: 1rem; }
+            .tab-panel { padding: 0 1rem 1rem; }
         }
+
         @media (prefers-reduced-motion: reduce) {
             * { animation: none !important; transition: none !important; }
-            .brand-name { width: auto; animation: none; }
-            .terminal-sub { opacity: 1; animation: none; }
-            .cursor { animation: none; opacity: 0; }
         }
-        :focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; border-radius: 4px; }
-        .svg-icon { width: 1.2rem; height: 1.2rem; stroke: currentColor; fill: none; stroke-width: 2; vertical-align: middle; }
+
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
-    <div class="glow" aria-hidden="true"></div>
 
-    <main class="container">
-        <header class="header" role="banner">
+<div class="page">
+    <header class="site-header">
+        <div class="header-grid">
             <div>
-                <div class="label-sm">Андрей Носар · Инженерные разработки УЭЦН</div>
-                <h1 class="terminal-heading">
-                    <span class="prompt">></span>
-                    <span class="brand-name" aria-label="nosar.engineering">nosar.engineering</span>
-                    <span class="cursor">_</span>
-                </h1>
-                <div class="terminal-sub"><span class="prompt">></span> engineer mode activated</div>
+                <div class="header-label">Андрей Носар / Инженерные разработки</div>
+                <h1 class="header-title">Инструменты для технолога <span>УЭЦН</span></h1>
+                <p class="header-subtitle">Веб-приложения для подбора оборудования, расчёта режимов и автоматизации рутинных операций. Работают в браузере, без установки.</p>
                 <div class="header-meta">
                     <span>📍 Россия</span>
-                    <span>⏳ Ведущий инженер-технолог УЭЦН</span>
-                    <span>📁 <strong class="highlight-number">3</strong> инженерных продукта</span>
+                    <span>⚡ Ведущий инженер-технолог</span>
+                    <span>🛠️ 3 инженерных продукта</span>
                 </div>
             </div>
-            <div style="text-align: right; margin-top: 0.3rem;">
-                <span class="badge-outline" role="status">Промышленный софт</span>
-                <div style="margin-top: 0.3rem; font-size: 0.95rem; color: var(--text-muted);">Автоматизация расчётов</div>
+            <div style="text-align: right;">
+                <span class="status-badge">Промышленный софт</span>
+                <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-tertiary);">Автоматизация расчётов</div>
             </div>
-        </header>
-
-        <div class="grid-2">
-            <section aria-labelledby="projects-heading">
-                <h2 id="projects-heading" class="heading-lg">Инженерные продукты</h2>
-                <div style="margin-top: 0.3rem; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
-                    Инструменты для реальной работы технолога УЭЦН
-                </div>
-
-                <!-- Карточка 1 -->
-                <article class="project-card" data-modal="modal-esp" tabindex="0" role="button" aria-describedby="desc-esp">
-                    <h3 class="heading-md">ESP Selector</h3>
-                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.2rem;">Интеллектуальный подбор УЭЦН</div>
-                    <div class="card-divider"></div>
-                    <p id="desc-esp">
-                        Моделирует физику процесса: законы подобия, поправку на вязкость через число Рейнольдса,
-                        энергетический баланс и температурную совместимость. Подбирает не просто насос,
-                        а сбалансированную установку: насос + ПЭД + гидрозащита + газосепаратор.
-                        <span style="color: var(--text-accent);">Исключает ошибки ручного подбора.</span>
-                    </p>
-                    <ul class="feature-list" aria-label="Возможности ESP Selector">
-                        <li>Комплексный подбор всей установки</li>
-                        <li>Интерактивные графики напора, мощности, КПД</li>
-                        <li>Цветовые подсказки: норма / на границе / риск</li>
-                        <li>Экспорт графиков в PNG для отчёта</li>
-                    </ul>
-                    <a href="https://tehnologdeveng.github.io/engineering-module-for-selecting-esp/" target="_blank" rel="noopener noreferrer" class="project-link" onclick="event.stopPropagation()">
-                        Открыть ESP Selector →
-                    </a>
-                    <div class="project-tags" aria-label="Теги проекта">
-                        <span>УЭЦН</span><span>Гидродинамика</span><span>Подбор оборудования</span>
-                    </div>
-                </article>
-
-                <!-- Карточка 2 -->
-                <article class="project-card" data-modal="modal-calc" tabindex="0" role="button" aria-describedby="desc-calc">
-                    <h3 class="heading-md">Инженерный калькулятор УЭЦН</h3>
-                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.2rem;"><strong class="highlight-number">12</strong> расчётных модулей для технолога</div>
-                    <div class="card-divider"></div>
-                    <p id="desc-calc">
-                        Всё, что нужно технологу ежедневно: АПВ/ПКВ, Кпр, давление на приёме,
-                        потери в кабеле, подбор отпайки ТМПН, частотное регулирование,
-                        свободный газ, охлаждение ПЭД, глушение скважины.
-                        <span style="color: var(--text-accent);">Больше не надо искать формулы в Excel.</span>
-                    </p>
-                    <ul class="feature-list" aria-label="Возможности калькулятора">
-                        <li><strong class="highlight-number">12</strong> модулей в одном интерфейсе</li>
-                        <li>Работает с телефона в поле</li>
-                        <li>Выгрузка в PDF и Excel</li>
-                        <li>Автосохранение параметров в браузере</li>
-                    </ul>
-                    <a href="https://tehnologdeveng.github.io/engineering-calculator/" target="_blank" rel="noopener noreferrer" class="project-link" onclick="event.stopPropagation()">
-                        Открыть калькулятор →
-                    </a>
-                    <div class="project-tags" aria-label="Теги проекта">
-                        <span>Расчёты</span><span>Технолог</span><span>Автоматизация</span>
-                    </div>
-                </article>
-
-                <!-- Карточка 3 -->
-                <article class="project-card" data-modal="modal-tmpn" tabindex="0" role="button" aria-describedby="desc-tmpn">
-                    <h3 class="heading-md">СУ · ТМПН · Отпайка</h3>
-                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.2rem;">Подбор станции управления и расчёт отпайки трансформатора</div>
-                    <div class="card-divider"></div>
-                    <p id="desc-tmpn">
-                        Вводите ток и напряжение ПЭД — получаете готовую рекомендацию по СУ, ТМПН
-                        и напряжению на всех ступенях отпаек. Автоматический подбор из <strong class="highlight-number">40+</strong> моделей
-                        (Триол, Электон, Борец, Новомет, Эталон) с ранжированием топ-3.
-                        <span style="color: var(--text-accent);">Экономит часы при согласовании оборудования.</span>
-                    </p>
-                    <ul class="feature-list" aria-label="Возможности модуля">
-                        <li>Расчёт всех четырёх ступеней отпаек</li>
-                        <li>Подбор СУ с ранжированием топ-3</li>
-                        <li>Встроенный каталог СУ и ТМПН</li>
-                        <li>Экспорт в PDF с графиками</li>
-                    </ul>
-                    <a href="https://tehnologdeveng.github.io/Transformer-Oil-filled-for-Submersible-Pumps/" target="_blank" rel="noopener noreferrer" class="project-link" onclick="event.stopPropagation()">
-                        Открыть модуль →
-                    </a>
-                    <div class="project-tags" aria-label="Теги проекта">
-                        <span>СУ</span><span>ТМПН</span><span>Отпайка</span>
-                    </div>
-                </article>
-            </section>
-
-            <aside aria-labelledby="about-heading">
-                <div class="sidebar-block">
-                    <h3 id="about-heading">Об авторе</h3>
-                    <p style="font-size: 0.95rem; color: #d6def0; margin-bottom: 0.3rem;"><strong>Андрей Носар</strong></p>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.6rem;">Ведущий инженер-технолог УЭЦН</p>
-                    <p style="font-size: 0.9rem; color: #b3c5f0;">
-                        Считаю, что хороший инструмент должен работать быстрее, чем открывается Excel.
-                        Поэтому автоматизирую то, чем занимаюсь каждый день.
-                    </p>
-                </div>
-                <div class="sidebar-block">
-                    <h3>Экспертиза</h3>
-                    <ul class="feature-list" aria-label="Области экспертизы">
-                        <li>Подбор УЭЦН и сопутствующего оборудования</li>
-                        <li>Расчёт режимов работы скважин</li>
-                        <li>Подбор станций управления и ТМПН</li>
-                        <li>Гидродинамическое моделирование</li>
-                    </ul>
-                </div>
-                <div class="sidebar-block">
-                    <h3>Технологии</h3>
-                    <div aria-label="Используемые технологии">
-                        <span class="tech-tag">HTML / CSS</span>
-                        <span class="tech-tag">JavaScript</span>
-                        <span class="tech-tag">GitHub Pages</span>
-                        <span class="tech-tag">Инженерные расчёты</span>
-                        <span class="tech-tag">Гидродинамика</span>
-                        <span class="tech-tag">Техническая документация</span>
-                    </div>
-                </div>
-                <div class="sidebar-block">
-                    <h3>Контакты</h3>
-                    <address style="font-style: normal;">
-                        <div class="contact-line">
-                            <span class="icon" aria-hidden="true">
-                                <svg class="svg-icon" viewBox="0 0 24 24" stroke="currentColor" fill="none">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
-                                </svg>
-                            </span>
-                            <a href="mailto:nosar.andrey@gmail.com" aria-label="Отправить email">nosar.andrey@gmail.com</a>
-                        </div>
-                        <div class="contact-line">
-                            <span class="icon" aria-hidden="true">
-                                <svg class="svg-icon" viewBox="0 0 24 24" stroke="currentColor" fill="none">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-                                </svg>
-                            </span>
-                            <a href="https://github.com/TehnologDevEng" target="_blank" rel="noopener noreferrer" aria-label="Профиль на GitHub">github.com/TehnologDevEng</a>
-                        </div>
-                    </address>
-                </div>
-            </aside>
         </div>
+    </header>
 
-        <footer class="footer" role="contentinfo">
-            <span>© 2026 Андрей Носар</span>
-            <div class="footer-links">
-                <a href="mailto:nosar.andrey@gmail.com">Связаться</a>
-                <a href="https://github.com/TehnologDevEng" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <div class="metrics">
+        <div class="metric">
+            <div class="metric-value">3</div>
+            <div class="metric-label">Инженерных<br>продукта</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">12</div>
+            <div class="metric-label">Расчётных<br>модулей</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">60<span>+</span></div>
+            <div class="metric-label">Моделей насосов<br>в каталоге</div>
+        </div>
+        <div class="metric">
+            <div class="metric-value">40<span>+</span></div>
+            <div class="metric-label">Моделей СУ<br>и ТМПН</div>
+        </div>
+    </div>
+
+    <div class="main-grid">
+        <section aria-labelledby="projects-heading">
+            <div class="section-header">
+                <h2 id="projects-heading" class="section-title">Инженерные продукты</h2>
+                <p class="section-desc">Инструменты, которые закрывают ежедневные задачи технолога УЭЦН</p>
             </div>
-        </footer>
-    </main>
 
-    <!-- Модальные окна с подробным описанием -->
-    <div id="modal-esp" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-esp-title">
-        <div class="modal">
+            <article class="project" data-modal="modal-esp" tabindex="0" role="button">
+                <div class="project-header">
+                    <div class="project-title-group">
+                        <div class="project-title">ESP Selector</div>
+                        <div class="project-subtitle">Интеллектуальный подбор УЭЦН</div>
+                    </div>
+                    <span class="project-status">Активен</span>
+                </div>
+                <p class="project-desc">
+                    Моделирует физику процесса: законы подобия, поправку на вязкость через число Рейнольдса,
+                    энергетический баланс и температурную совместимость. Подбирает не просто насос,
+                    а сбалансированную установку: насос + ПЭД + гидрозащита + газосепаратор.
+                </p>
+                <ul class="project-features">
+                    <li>Комплексный подбор всей установки</li>
+                    <li>Интерактивные графики напора, мощности, КПД</li>
+                    <li>Цветовые индикаторы состояния</li>
+                    <li>Экспорт графиков в PNG</li>
+                </ul>
+                <div class="project-footer">
+                    <a href="https://tehnologdeveng.github.io/engineering-module-for-selecting-esp/" target="_blank" rel="noopener noreferrer" class="project-link" onclick="event.stopPropagation()">Открыть инструмент</a>
+                    <div class="project-tags">
+                        <span class="tag">УЭЦН</span>
+                        <span class="tag">Гидродинамика</span>
+                        <span class="tag">Подбор оборудования</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project" data-modal="modal-calc" tabindex="0" role="button">
+                <div class="project-header">
+                    <div class="project-title-group">
+                        <div class="project-title">Инженерный калькулятор УЭЦН</div>
+                        <div class="project-subtitle">12 расчётных модулей для технолога</div>
+                    </div>
+                    <span class="project-status">Активен</span>
+                </div>
+                <p class="project-desc">
+                    Всё, что нужно технологу ежедневно: АПВ/ПКВ, Кпр, давление на приёме,
+                    потери в кабеле, подбор отпайки ТМПН, частотное регулирование,
+                    свободный газ, охлаждение ПЭД, глушение скважины.
+                </p>
+                <ul class="project-features">
+                    <li>12 модулей в одном интерфейсе</li>
+                    <li>Работает с телефона в поле</li>
+                    <li>Выгрузка в PDF и Excel</li>
+                    <li>Автосохранение параметров</li>
+                </ul>
+                <div class="project-footer">
+                    <a href="https://tehnologdeveng.github.io/engineering-calculator/" target="_blank" rel="noopener noreferrer" class="project-link" onclick="event.stopPropagation()">Открыть калькулятор</a>
+                    <div class="project-tags">
+                        <span class="tag">Расчёты</span>
+                        <span class="tag">Технолог</span>
+                        <span class="tag">Автоматизация</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="project" data-modal="modal-tmpn" tabindex="0" role="button">
+                <div class="project-header">
+                    <div class="project-title-group">
+                        <div class="project-title">СУ · ТМПН · Отпайка</div>
+                        <div class="project-subtitle">Подбор станции управления и расчёт отпайки</div>
+                    </div>
+                    <span class="project-status">Активен</span>
+                </div>
+                <p class="project-desc">
+                    Вводите ток и напряжение ПЭД — получаете готовую рекомендацию по СУ, ТМПН
+                    и напряжению на всех ступенях отпаек. Автоматический подбор из 40+ моделей
+                    с ранжированием топ-3.
+                </p>
+                <ul class="project-features">
+                    <li>Расчёт всех четырёх ступеней отпаек</li>
+                    <li>Подбор СУ с ранжированием топ-3</li>
+                    <li>Встроенный каталог СУ и ТМПН</li>
+                    <li>Экспорт в PDF с графиками</li>
+                </ul>
+                <div class="project-footer">
+                    <a href="https://tehnologdeveng.github.io/Transformer-Oil-filled-for-Submersible-Pumps/" target="_blank" rel="noopener noreferrer" class="project-link" onclick="event.stopPropagation()">Открыть модуль</a>
+                    <div class="project-tags">
+                        <span class="tag">СУ</span>
+                        <span class="tag">ТМПН</span>
+                        <span class="tag">Отпайка</span>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <aside class="sidebar" aria-labelledby="about-heading">
+            <div class="sidebar-block">
+                <h3 id="about-heading">Об авторе</h3>
+                <div class="author-name">Андрей Носар</div>
+                <div class="author-role">Ведущий инженер-технолог УЭЦН</div>
+                <p class="author-bio">
+                    Считаю, что хороший инструмент должен работать быстрее, чем открывается Excel.
+                    Поэтому автоматизирую то, чем занимаюсь каждый день.
+                </p>
+            </div>
+
+            <div class="sidebar-block">
+                <h3>Экспертиза</h3>
+                <ul class="expertise-list">
+                    <li>Подбор УЭЦН и сопутствующего оборудования</li>
+                    <li>Расчёт режимов работы скважин</li>
+                    <li>Подбор станций управления и ТМПН</li>
+                    <li>Гидродинамическое моделирование</li>
+                </ul>
+            </div>
+
+            <div class="sidebar-block">
+                <h3>Технологии</h3>
+                <div class="tech-grid">
+                    <span class="tech-tag">HTML / CSS</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">GitHub Pages</span>
+                    <span class="tech-tag">Инженерные расчёты</span>
+                    <span class="tech-tag">Гидродинамика</span>
+                    <span class="tech-tag">Техническая документация</span>
+                </div>
+            </div>
+
+            <div class="sidebar-block">
+                <h3>Контакты</h3>
+                <div class="contact-list">
+                    <div class="contact-item">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="4" width="20" height="16" rx="2"/>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                        </svg>
+                        <a href="mailto:nosar.andrey@gmail.com">nosar.andrey@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
+                            <path d="M9 18c-4.51 2-5-2-7-2"/>
+                        </svg>
+                        <a href="https://github.com/TehnologDevEng" target="_blank" rel="noopener noreferrer">github.com/TehnologDevEng</a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <footer class="site-footer">
+        <span>© 2026 Андрей Носар</span>
+        <div class="footer-links">
+            <a href="mailto:nosar.andrey@gmail.com">Связаться</a>
+            <a href="https://github.com/TehnologDevEng" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+    </footer>
+</div>
+
+<div id="modal-esp" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-esp-title">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modal-esp-title" class="modal-title">ESP Selector</h2>
             <button class="modal-close" aria-label="Закрыть окно">&times;</button>
-            <h2 id="modal-esp-title">ESP Selector — интеллектуальный подбор УЭЦН</h2>
-
-            <!-- Панель вкладок -->
-            <div class="tabs" role="tablist" aria-label="Информация о продукте">
-                <button role="tab" id="tab-overview-btn" class="tab-btn active" aria-selected="true" aria-controls="tab-overview">Обзор</button>
-                <button role="tab" id="tab-instruction-btn" class="tab-btn" aria-selected="false" aria-controls="tab-instruction" tabindex="-1">Инструкция</button>
-            </div>
-
-            <!-- Содержимое вкладки "Обзор" -->
-            <div class="tab-panel active" id="tab-overview" role="tabpanel" aria-labelledby="tab-overview-btn">
-                <p>Инструмент моделирует полную физику процесса подбора установки электроцентробежного насоса. Учитывает законы подобия, поправку на вязкость, энергетический баланс и тепловую совместимость.</p>
-                <ul class="feature-list">
+        </div>
+        <div class="tabs" role="tablist">
+            <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-esp-overview">Обзор</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-esp-instruction" tabindex="-1">Инструкция</button>
+        </div>
+        <div class="tab-panel active" id="tab-esp-overview" role="tabpanel">
+            <div class="modal-body">
+                <p class="modal-desc">Инструмент моделирует полную физику процесса подбора установки электроцентробежного насоса. Учитывает законы подобия, поправку на вязкость, энергетический баланс и тепловую совместимость.</p>
+                <ul class="modal-features">
                     <li>Автоматический подбор насоса, ПЭД, гидрозащиты и газосепаратора</li>
                     <li>Интерактивные графики напора, мощности и КПД</li>
                     <li>Цветовые индикаторы состояния: норма, граница, риск</li>
@@ -573,156 +1008,157 @@
                     <li>Встроенная база характеристик насосов и двигателей</li>
                 </ul>
                 <div class="modal-actions">
-                    <a href="https://tehnologdeveng.github.io/engineering-module-for-selecting-esp/" target="_blank" rel="noopener noreferrer" class="project-link">
-                        Открыть инструмент →
-                    </a>
-                </div>
-            </div>
-
-            <!-- Содержимое вкладки "Инструкция" -->
-            <div class="tab-panel" id="tab-instruction" role="tabpanel" aria-labelledby="tab-instruction-btn">
-                <div class="instruction-content">
-                    <h3>📘 Краткое руководство пользователя (v8.6.1)</h3>
-
-                    <h4>1. Назначение программы</h4>
-                    <p>ESP Selector — инженерный онлайн-калькулятор для подбора установок электрических центробежных насосов (УЭЦН) к нефтяным скважинам. Программа подбирает насос, погружной электродвигатель (ПЭД) и гидрозащиту, сразу показывая, насколько хорошо оборудование подходит, и предупреждая о возможных проблемах (вязкость, газ, частота, мощность).</p>
-
-                    <h4>2. Основные входные данные</h4>
-                    <ul>
-                        <li><strong>Дебит жидкости (Q)</strong> — целевой объём жидкости на устье, м³/сут.</li>
-                        <li><strong>Требуемый напор (H)</strong> — суммарный напор (можно рассчитать автоматически).</li>
-                        <li><strong>Диаметр обсадной колонны</strong> — определяет габарит насоса (2А, 3, 5, 5А, 6, 7А).</li>
-                        <li><strong>Плотность жидкости (ρ)</strong> — влияет на напор и мощность.</li>
-                        <li><strong>Вязкость (μ)</strong> — при >1,1 сП вводится поправка на характеристики насоса.</li>
-                        <li><strong>Температура на приёме</strong> — для выбора термостойкого ПЭД.</li>
-                        <li><strong>Обводнённость, газовый фактор, давление насыщения</strong> — расчёт доли свободного газа.</li>
-                        <li><strong>Частота ЧРП</strong> — рабочая частота (35–200 Гц).</li>
-                        <li><strong>Исполнение насоса</strong> — нирезист или ПКМ.</li>
-                        <li><strong>Газосепаратор</strong> — «Нет», «Газосепаратор» или «Газосепаратор-диспергатор».</li>
-                    </ul>
-
-                    <h4>3. Как работает алгоритм подбора</h4>
-                    <ol>
-                        <li><strong>Пересчёт в номинальные условия (50 Гц)</strong> через законы подобия: Q₅₀ = Q / k, H₅₀ = H / k², где k = F / 50.</li>
-                        <li><strong>Фильтрация по каталогу</strong> (~60 насосов) по габариту, исполнению, рабочей зоне.</li>
-                        <li><strong>Коррекция на вязкость</strong> (если μ > 1,1 сП) по числу Рейнольдса.</li>
-                        <li><strong>Учёт свободного газа</strong> — деградация напора, снижение газосепаратором в 4 или 10 раз.</li>
-                        <li><strong>Подбор ПЭД</strong> с запасом ≈15%, автоматически выбирается тип (асинхронный или вентильный).</li>
-                        <li><strong>Подбор гидрозащиты</strong> по осевой нагрузке.</li>
-                        <li><strong>Оценка совпадения</strong> — рейтинг 0–100 и пометка «★ Лучший выбор».</li>
-                    </ol>
-
-                    <h4>4. Как читать результаты</h4>
-                    <p>После подбора отображаются карточки насосов (до 8 вариантов) с рейтингом, параметрами, подобранным ПЭД и гидрозащитой, предупреждающими бейджами и интерактивными графиками (напор, мощность, КПД, рабочая зона). Маркер цели можно перетаскивать — дебит автоматически обновится.</p>
-
-                    <h4>5. Основные возможности</h4>
-                    <ul>
-                        <li>Автоматический расчёт напора по глубине спуска и давлениям.</li>
-                        <li>Реалистичные поправки на вязкость и свободный газ.</li>
-                        <li>Частотное регулирование 35–200 Гц с автоматическим выбором вентильного ПЭД.</li>
-                        <li>Цветовая обратная связь на карточках (зелёный/оранжевый/красный).</li>
-                        <li>Сравнение выбранных вариантов в таблице.</li>
-                        <li>Интерактивные графики с экспортом в PNG.</li>
-                        <li>Сохранение/загрузка конфигураций в браузере.</li>
-                        <li>Печать отчёта.</li>
-                        <li>Валидация полей и тёмная/светлая тема.</li>
-                    </ul>
-
-                    <h4>6. Типичный сценарий работы</h4>
-                    <ol>
-                        <li>Введите дебит, плотность, вязкость.</li>
-                        <li>Выберите диаметр обсадной колонны.</li>
-                        <li>Включите автоматический расчёт напора, заполните глубины и давления.</li>
-                        <li>При наличии газа укажите газовый фактор и тип сепаратора.</li>
-                        <li>Установите частоту и исполнение насоса.</li>
-                        <li>Нажмите «Подобрать оборудование».</li>
-                        <li>Оцените лучший вариант, при необходимости сравните и уточните дебит на графике.</li>
-                        <li>Сохраните конфигурацию или распечатайте отчёт.</li>
-                    </ol>
-
-                    <h4>🎯 Как определяется «Лучший выбор»</h4>
-                    <p>Score = A + B. A — попадание в рабочую зону (60 если внутри, 20 если нет). B — близость номинальной подачи к целевому дебиту (до 30 баллов). Итоговый балл до 100. Насос с максимальным счётом получает плашку «★ Лучший выбор».</p>
-
-                    <h4>📊 Примеры расчёта балла</h4>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Насос</th>
-                                <th>q<sub>min</sub></th>
-                                <th>q<sub>50</sub></th>
-                                <th>q<sub>max</sub></th>
-                                <th>Q в зоне?</th>
-                                <th>A</th>
-                                <th>Расстояние до q<sub>50</sub></th>
-                                <th>B</th>
-                                <th>Итого</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Насос 1 (идеал)</td>
-                                <td>70</td>
-                                <td>80</td>
-                                <td>95</td>
-                                <td>✅</td>
-                                <td>60</td>
-                                <td>0</td>
-                                <td>30</td>
-                                <td><strong>100</strong></td>
-                            </tr>
-                            <tr>
-                                <td>Насос 2</td>
-                                <td>50</td>
-                                <td>75</td>
-                                <td>90</td>
-                                <td>✅</td>
-                                <td>60</td>
-                                <td>5</td>
-                                <td>28</td>
-                                <td>88</td>
-                            </tr>
-                            <tr>
-                                <td>Насос 3</td>
-                                <td>85</td>
-                                <td>100</td>
-                                <td>120</td>
-                                <td>❌</td>
-                                <td>20</td>
-                                <td>20</td>
-                                <td>24</td>
-                                <td>44</td>
-                            </tr>
-                            <tr>
-                                <td>Насос 4 (граница)</td>
-                                <td>60</td>
-                                <td>90</td>
-                                <td>110</td>
-                                <td>✅</td>
-                                <td>60</td>
-                                <td>10</td>
-                                <td>26.7</td>
-                                <td>87</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <h4>⚠️ Важные нюансы</h4>
-                    <ul>
-                        <li>Score — чисто гидравлическая оценка, без учёта стоимости и энергопотребления.</li>
-                        <li>Выход за рабочую зону резко снижает балл, такой насос не станет лучшим.</li>
-                        <li>При вязкости и газе номинальные характеристики корректируются, рейтинг остаётся честным.</li>
-                    </ul>
+                    <a href="https://tehnologdeveng.github.io/engineering-module-for-selecting-esp/" target="_blank" rel="noopener noreferrer" class="project-link">Открыть инструмент</a>
+                    <button class="btn-secondary modal-close-btn">Закрыть</button>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="tab-panel" id="tab-esp-instruction" role="tabpanel">
+            <div class="instruction-content">
+                <h3>Краткое руководство пользователя (v8.6.1)</h3>
 
-    <div id="modal-calc" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-calc-title">
-        <div class="modal">
+                <h4>1. Назначение программы</h4>
+                <p>ESP Selector — инженерный онлайн-калькулятор для подбора установок электрических центробежных насосов (УЭЦН) к нефтяным скважинам. Программа подбирает насос, погружной электродвигатель (ПЭД) и гидрозащиту, сразу показывая, насколько хорошо оборудование подходит, и предупреждая о возможных проблемах.</p>
+
+                <h4>2. Основные входные данные</h4>
+                <ul>
+                    <li><strong>Дебит жидкости (Q)</strong> — целевой объём жидкости на устье, м³/сут.</li>
+                    <li><strong>Требуемый напор (H)</strong> — суммарный напор (можно рассчитать автоматически).</li>
+                    <li><strong>Диаметр обсадной колонны</strong> — определяет габарит насоса (2А, 3, 5, 5А, 6, 7А).</li>
+                    <li><strong>Плотность жидкости (ρ)</strong> — влияет на напор и мощность.</li>
+                    <li><strong>Вязкость (μ)</strong> — при >1,1 сП вводится поправка на характеристики насоса.</li>
+                    <li><strong>Температура на приёме</strong> — для выбора термостойкого ПЭД.</li>
+                    <li><strong>Обводнённость, газовый фактор, давление насыщения</strong> — расчёт доли свободного газа.</li>
+                    <li><strong>Частота ЧРП</strong> — рабочая частота (35–200 Гц).</li>
+                    <li><strong>Исполнение насоса</strong> — нирезист или ПКМ.</li>
+                    <li><strong>Газосепаратор</strong> — «Нет», «Газосепаратор» или «Газосепаратор-диспергатор».</li>
+                </ul>
+
+                <h4>3. Как работает алгоритм подбора</h4>
+                <ol>
+                    <li><strong>Пересчёт в номинальные условия (50 Гц)</strong> через законы подобия: Q₅₀ = Q / k, H₅₀ = H / k², где k = F / 50.</li>
+                    <li><strong>Фильтрация по каталогу</strong> (~60 насосов) по габариту, исполнению, рабочей зоне.</li>
+                    <li><strong>Коррекция на вязкость</strong> (если μ > 1,1 сП) по числу Рейнольдса.</li>
+                    <li><strong>Учёт свободного газа</strong> — деградация напора, снижение газосепаратором в 4 или 10 раз.</li>
+                    <li><strong>Подбор ПЭД</strong> с запасом ≈15%, автоматически выбирается тип (асинхронный или вентильный).</li>
+                    <li><strong>Подбор гидрозащиты</strong> по осевой нагрузке.</li>
+                    <li><strong>Оценка совпадения</strong> — рейтинг 0–100 и пометка «★ Лучший выбор».</li>
+                </ol>
+
+                <h4>4. Как читать результаты</h4>
+                <p>После подбора отображаются карточки насосов (до 8 вариантов) с рейтингом, параметрами, подобранным ПЭД и гидрозащитой, предупреждающими бейджами и интерактивными графиками (напор, мощность, КПД, рабочая зона). Маркер цели можно перетаскивать — дебит автоматически обновится.</p>
+
+                <h4>5. Основные возможности</h4>
+                <ul>
+                    <li>Автоматический расчёт напора по глубине спуска и давлениям.</li>
+                    <li>Реалистичные поправки на вязкость и свободный газ.</li>
+                    <li>Частотное регулирование 35–200 Гц с автоматическим выбором вентильного ПЭД.</li>
+                    <li>Цветовая обратная связь на карточках (зелёный/оранжевый/красный).</li>
+                    <li>Сравнение выбранных вариантов в таблице.</li>
+                    <li>Интерактивные графики с экспортом в PNG.</li>
+                    <li>Сохранение/загрузка конфигураций в браузере.</li>
+                    <li>Печать отчёта.</li>
+                    <li>Валидация полей и тёмная/светлая тема.</li>
+                </ul>
+
+                <h4>6. Типичный сценарий работы</h4>
+                <ol>
+                    <li>Введите дебит, плотность, вязкость.</li>
+                    <li>Выберите диаметр обсадной колонны.</li>
+                    <li>Включите автоматический расчёт напора, заполните глубины и давления.</li>
+                    <li>При наличии газа укажите газовый фактор и тип сепаратора.</li>
+                    <li>Установите частоту и исполнение насоса.</li>
+                    <li>Нажмите «Подобрать оборудование».</li>
+                    <li>Оцените лучший вариант, при необходимости сравните и уточните дебит на графике.</li>
+                    <li>Сохраните конфигурацию или распечатайте отчёт.</li>
+                </ol>
+
+                <h4>Как определяется «Лучший выбор»</h4>
+                <p>Score = A + B. A — попадание в рабочую зону (60 если внутри, 20 если нет). B — близость номинальной подачи к целевому дебиту (до 30 баллов). Итоговый балл до 100. Насос с максимальным счётом получает плашку «★ Лучший выбор».</p>
+
+                <h4>Примеры расчёта балла</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Насос</th>
+                            <th>q<sub>min</sub></th>
+                            <th>q<sub>50</sub></th>
+                            <th>q<sub>max</sub></th>
+                            <th>В зоне?</th>
+                            <th>A</th>
+                            <th>Расстояние</th>
+                            <th>B</th>
+                            <th>Итого</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Насос 1 (идеал)</td>
+                            <td>70</td>
+                            <td>80</td>
+                            <td>95</td>
+                            <td>✓</td>
+                            <td>60</td>
+                            <td>0</td>
+                            <td>30</td>
+                            <td><strong>100</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Насос 2</td>
+                            <td>50</td>
+                            <td>75</td>
+                            <td>90</td>
+                            <td>✓</td>
+                            <td>60</td>
+                            <td>5</td>
+                            <td>28</td>
+                            <td>88</td>
+                        </tr>
+                        <tr>
+                            <td>Насос 3</td>
+                            <td>85</td>
+                            <td>100</td>
+                            <td>120</td>
+                            <td>✗</td>
+                            <td>20</td>
+                            <td>20</td>
+                            <td>24</td>
+                            <td>44</td>
+                        </tr>
+                        <tr>
+                            <td>Насос 4 (граница)</td>
+                            <td>60</td>
+                            <td>90</td>
+                            <td>110</td>
+                            <td>✓</td>
+                            <td>60</td>
+                            <td>10</td>
+                            <td>26.7</td>
+                            <td>87</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Важные нюансы</h4>
+                <ul>
+                    <li>Score — чисто гидравлическая оценка, без учёта стоимости и энергопотребления.</li>
+                    <li>Выход за рабочую зону резко снижает балл, такой насос не станет лучшим.</li>
+                    <li>При вязкости и газе номинальные характеристики корректируются, рейтинг остаётся честным.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-calc" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-calc-title">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modal-calc-title" class="modal-title">Инженерный калькулятор УЭЦН</h2>
             <button class="modal-close" aria-label="Закрыть окно">&times;</button>
-            <h2 id="modal-calc-title">Инженерный калькулятор УЭЦН</h2>
-            <p>12 расчётных модулей, закрывающих ежедневные задачи технолога: от определения давления на приёме до подбора отпайки ТМПН и расчёта потерь в кабеле.</p>
-            <ul class="feature-list">
+        </div>
+        <div class="modal-body">
+            <p class="modal-desc">12 расчётных модулей, закрывающих ежедневные задачи технолога: от определения давления на приёме до подбора отпайки ТМПН и расчёта потерь в кабеле.</p>
+            <ul class="modal-features">
                 <li>АПВ / ПКВ, коэффициент продуктивности</li>
                 <li>Давление на приёме насоса</li>
                 <li>Потери напряжения в кабеле</li>
@@ -735,19 +1171,22 @@
                 <li>Адаптивный интерфейс для работы с телефона в поле</li>
             </ul>
             <div class="modal-actions">
-                <a href="https://tehnologdeveng.github.io/engineering-calculator/" target="_blank" rel="noopener noreferrer" class="project-link">
-                    Открыть калькулятор →
-                </a>
+                <a href="https://tehnologdeveng.github.io/engineering-calculator/" target="_blank" rel="noopener noreferrer" class="project-link">Открыть калькулятор</a>
+                <button class="btn-secondary modal-close-btn">Закрыть</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div id="modal-tmpn" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-tmpn-title">
-        <div class="modal">
+<div id="modal-tmpn" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-tmpn-title">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modal-tmpn-title" class="modal-title">Подбор СУ · ТМПН · Отпайка</h2>
             <button class="modal-close" aria-label="Закрыть окно">&times;</button>
-            <h2 id="modal-tmpn-title">Подбор СУ · ТМПН · Отпайка</h2>
-            <p>Профессиональный модуль для подбора станции управления и трансформатора. Автоматически рассчитывает все четыре ступени отпаек и ранжирует топ-3 модели СУ из встроенного каталога.</p>
-            <ul class="feature-list">
+        </div>
+        <div class="modal-body">
+            <p class="modal-desc">Профессиональный модуль для подбора станции управления и трансформатора. Автоматически рассчитывает все четыре ступени отпаек и ранжирует топ-3 модели СУ из встроенного каталога.</p>
+            <ul class="modal-features">
                 <li>Расчёт напряжения на всех ступенях отпаек ТМПН</li>
                 <li>Ранжирование топ-3 станций управления по току и мощности</li>
                 <li>База из 40+ моделей СУ (Триол, Электон, Борец, Новомет, Эталон)</li>
@@ -756,125 +1195,130 @@
                 <li>Сохранение истории подбора в браузере</li>
             </ul>
             <div class="modal-actions">
-                <a href="https://tehnologdeveng.github.io/Transformer-Oil-filled-for-Submersible-Pumps/" target="_blank" rel="noopener noreferrer" class="project-link">
-                    Открыть модуль →
-                </a>
+                <a href="https://tehnologdeveng.github.io/Transformer-Oil-filled-for-Submersible-Pumps/" target="_blank" rel="noopener noreferrer" class="project-link">Открыть модуль</a>
+                <button class="btn-secondary modal-close-btn">Закрыть</button>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        (function() {
-            const cards = document.querySelectorAll('.project-card[data-modal]');
-            const overlays = document.querySelectorAll('.modal-overlay');
-            let lastActiveElement = null;
+<script>
+(function() {
+    const cards = document.querySelectorAll('.project[data-modal]');
+    const overlays = document.querySelectorAll('.modal-overlay');
+    let lastActiveElement = null;
 
-            function openModal(overlay) {
-                if (!overlay) return;
-                lastActiveElement = document.activeElement;
-                overlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
+    function openModal(overlay) {
+        if (!overlay) return;
+        lastActiveElement = document.activeElement;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        const focusable = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        if (focusable.length) {
+            const closeBtn = overlay.querySelector('.modal-close');
+            if (closeBtn) closeBtn.focus();
+        }
+        trapFocus(overlay);
+    }
+
+    function closeModal(overlay) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        if (lastActiveElement) lastActiveElement.focus();
+        lastActiveElement = null;
+    }
+
+    function trapFocus(overlay) {
+        overlay.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
                 const focusable = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-                if (focusable.length) {
-                    const activeTab = overlay.querySelector('.tab-btn.active');
-                    if (activeTab) activeTab.focus();
-                    else focusable[0].focus();
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
                 }
-                trapFocus(overlay);
             }
+        });
+    }
 
-            function closeModal(overlay) {
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
-                if (lastActiveElement) lastActiveElement.focus();
-                lastActiveElement = null;
+    cards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            if (e.target.closest('a, button')) return;
+            const modalId = this.getAttribute('data-modal');
+            openModal(document.getElementById(modalId));
+        });
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const modalId = this.getAttribute('data-modal');
+                openModal(document.getElementById(modalId));
             }
+        });
+    });
 
-            function trapFocus(overlay) {
-                overlay.addEventListener('keydown', function(e) {
-                    if (e.key === 'Tab') {
-                        const focusable = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-                        const first = focusable[0];
-                        const last = focusable[focusable.length - 1];
-                        if (e.shiftKey && document.activeElement === first) {
-                            e.preventDefault();
-                            last.focus();
-                        } else if (!e.shiftKey && document.activeElement === last) {
-                            e.preventDefault();
-                            first.focus();
-                        }
-                    }
-                });
-            }
+    overlays.forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) closeModal(overlay);
+        });
+        const closeBtns = overlay.querySelectorAll('.modal-close, .modal-close-btn');
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', () => closeModal(overlay));
+        });
+    });
 
-            cards.forEach(card => {
-                card.addEventListener('click', function(e) {
-                    if (e.target.closest('a')) return;
-                    const modalId = this.getAttribute('data-modal');
-                    openModal(document.getElementById(modalId));
-                });
-                card.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        const modalId = this.getAttribute('data-modal');
-                        openModal(document.getElementById(modalId));
-                    }
-                });
-            });
-
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
             overlays.forEach(overlay => {
-                overlay.addEventListener('click', function(e) {
-                    if (e.target === overlay || e.target.classList.contains('modal-close')) {
-                        closeModal(overlay);
-                    }
+                if (overlay.classList.contains('active')) closeModal(overlay);
+            });
+        }
+    });
+
+    document.querySelectorAll('.modal').forEach(modal => {
+        const tabBtns = modal.querySelectorAll('.tab-btn');
+        const tabPanels = modal.querySelectorAll('.tab-panel');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.getAttribute('aria-controls');
+                const targetPanel = modal.querySelector('#' + targetId);
+
+                tabBtns.forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-selected', 'false');
+                    b.setAttribute('tabindex', '-1');
                 });
+                tabPanels.forEach(p => p.classList.remove('active'));
+
+                btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
+                btn.setAttribute('tabindex', '0');
+                if (targetPanel) targetPanel.classList.add('active');
             });
 
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    overlays.forEach(overlay => {
-                        if (overlay.classList.contains('active')) closeModal(overlay);
-                    });
+            btn.addEventListener('keydown', function(e) {
+                const buttons = Array.from(tabBtns);
+                let index = buttons.indexOf(this);
+                if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    index = (index + 1) % buttons.length;
+                    buttons[index].focus();
+                    buttons[index].click();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    index = (index - 1 + buttons.length) % buttons.length;
+                    buttons[index].focus();
+                    buttons[index].click();
                 }
             });
+        });
+    });
+})();
+</script>
 
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            const tabPanels = document.querySelectorAll('.tab-panel');
-
-            tabButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const targetPanel = document.getElementById(btn.getAttribute('aria-controls'));
-                    tabButtons.forEach(b => {
-                        b.classList.remove('active');
-                        b.setAttribute('aria-selected', 'false');
-                        b.setAttribute('tabindex', '-1');
-                    });
-                    tabPanels.forEach(p => p.classList.remove('active'));
-                    btn.classList.add('active');
-                    btn.setAttribute('aria-selected', 'true');
-                    btn.setAttribute('tabindex', '0');
-                    targetPanel.classList.add('active');
-                });
-
-                btn.addEventListener('keydown', function(e) {
-                    const buttons = Array.from(tabButtons);
-                    let index = buttons.indexOf(this);
-                    if (e.key === 'ArrowRight') {
-                        e.preventDefault();
-                        index = (index + 1) % buttons.length;
-                        buttons[index].focus();
-                        buttons[index].click();
-                    } else if (e.key === 'ArrowLeft') {
-                        e.preventDefault();
-                        index = (index - 1 + buttons.length) % buttons.length;
-                        buttons[index].focus();
-                        buttons[index].click();
-                    }
-                });
-            });
-
-            console.log('🛠️ Engineer mode v1.0.4 | Modal + tabs + a11y | nosar.engineering');
-        })();
-    </script>
 </body>
 </html>
