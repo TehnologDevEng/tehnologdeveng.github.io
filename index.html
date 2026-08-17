@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Андрей Носар — Инженерные инструменты УЭЦН</title>
-    <meta name="description" content="Инженерные веб-инструменты для технолога УЭЦН: подбор УЭЦН, расчёт отпаек ТМПН, станции управления, калькулятор режимов." />
+    <title>Андрей Носар — Инженерные инструменты УЭЦН & ESP AI ANALYZER</title>
+    <meta name="description" content="Инженерные веб-инструменты для технолога УЭЦН: ESP AI ANALYZER, подбор УЭЦН, расчёт отпаек ТМПН, станции управления, калькулятор режимов." />
     <meta name="author" content="Андрей Носар" />
-    <meta name="date" content="2026-07-04" />
+    <meta name="date" content="2026-08-17" />
     <link rel="canonical" href="https://tehnologdeveng.github.io/" />
 
-    <meta property="og:title" content="Андрей Носар — Инженерные разработки УЭЦН" />
-    <meta property="og:description" content="ESP Selector, инженерный калькулятор, подбор СУ и отпаек ТМПН." />
+    <meta property="og:title" content="Андрей Носар — Инженерные разработки УЭЦН & ESP AI ANALYZER" />
+    <meta property="og:description" content="ESP AI ANALYZER, ESP Selector, инженерный калькулятор, подбор СУ и отпаек ТМПН." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://tehnologdeveng.github.io/" />
     <meta property="og:image" content="https://tehnologdeveng.github.io/preview.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <script type="application/ld+json">
     {
@@ -27,7 +27,7 @@
         "jobTitle": "Ведущий инженер-технолог УЭЦН",
         "url": "https://tehnologdeveng.github.io/",
         "sameAs": ["https://github.com/TehnologDevEng"],
-        "knowsAbout": ["УЭЦН", "Подбор насосного оборудования", "Расчёт режимов скважин", "ТМПН", "Станции управления"]
+        "knowsAbout": ["УЭЦН", "ESP AI ANALYZER", "Подбор насосного оборудования", "Расчёт режимов скважин", "ТМПН", "Станции управления"]
     }
     </script>
 
@@ -56,7 +56,6 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         html { scroll-behavior: smooth; }
 
         body {
@@ -106,9 +105,7 @@
             margin-bottom: 0.5rem;
         }
 
-        .header-title span {
-            color: var(--accent);
-        }
+        .header-title span { color: var(--accent); }
 
         .header-subtitle {
             font-size: 1.05rem;
@@ -160,10 +157,7 @@
             50% { opacity: 1; }
         }
 
-        .section-header {
-            margin-bottom: 1.5rem;
-        }
-
+        .section-header { margin-bottom: 1.5rem; }
         .section-title {
             font-size: 1.125rem;
             font-weight: 600;
@@ -191,9 +185,7 @@
             transition: border-color 0.2s ease;
         }
 
-        .metric:hover {
-            border-color: var(--border-hover);
-        }
+        .metric:hover { border-color: var(--border-hover); }
 
         .metric-value {
             font-family: var(--font-mono);
@@ -204,9 +196,7 @@
             margin-bottom: 0.4rem;
         }
 
-        .metric-value span {
-            color: var(--accent);
-        }
+        .metric-value span { color: var(--accent); }
 
         .metric-label {
             font-size: 0.8rem;
@@ -214,6 +204,452 @@
             line-height: 1.4;
         }
 
+        /* ESP AI ANALYZER SECTION STYLES */
+        .ai-section {
+            margin-bottom: 4.5rem;
+            position: relative;
+        }
+
+        .ai-badge-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .ai-badge {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.8rem;
+            border-radius: 100px;
+            background: rgba(59, 130, 246, 0.12);
+            color: var(--accent-hover);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ai-badge-pulse {
+            width: 7px;
+            height: 7px;
+            background: #60a5fa;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #3b82f6;
+            animation: pulse 1.8s infinite;
+        }
+
+        .ai-hero-card {
+            background: linear-gradient(145deg, var(--bg-elevated) 0%, rgba(26, 31, 46, 0.6) 100%);
+            border: 1px solid var(--border-hover);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2.5rem;
+        }
+
+        .ai-hero-card::before {
+            content: '';
+            position: absolute;
+            top: -120px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(0,0,0,0) 70%);
+            pointer-events: none;
+        }
+
+        .ai-hero-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .ai-hero-title {
+            font-size: clamp(2rem, 3.5vw, 2.75rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .ai-hero-title span {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .ai-hero-subtitle {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #cbd5e1;
+            line-height: 1.45;
+            margin-bottom: 1rem;
+        }
+
+        .ai-hero-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: 2rem;
+        }
+
+        .ai-hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-status-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.55rem 1.1rem;
+            font-size: 0.85rem;
+            font-family: var(--font-mono);
+            color: var(--warning);
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: var(--radius-sm);
+        }
+
+        .ai-mockup-frame {
+            background: #090d16;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: var(--radius);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(59, 130, 246, 0.12);
+            overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .ai-mockup-frame:hover {
+            transform: translateY(-3px) scale(1.01);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 45px rgba(59, 130, 246, 0.25);
+        }
+
+        .ai-mockup-bar {
+            background: #0f1422;
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ai-mockup-dots { display: flex; gap: 6px; }
+        .ai-mockup-dots span {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: rgba(148, 163, 184, 0.25);
+        }
+        .ai-mockup-dots span:nth-child(1) { background: #ef4444; }
+        .ai-mockup-dots span:nth-child(2) { background: #f59e0b; }
+        .ai-mockup-dots span:nth-child(3) { background: #22c55e; }
+
+        .ai-mockup-tag {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+        }
+
+        .ai-mockup-img-wrap {
+            position: relative;
+            width: 100%;
+            background: #06080d;
+            aspect-ratio: 16 / 10.5;
+            overflow: hidden;
+        }
+
+        .ai-mockup-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            display: block;
+        }
+
+        .ai-subheading-group { margin-bottom: 1.75rem; }
+        .ai-subheading-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+            margin-bottom: 0.35rem;
+        }
+
+        .ai-subheading-desc {
+            font-size: 0.9rem;
+            color: var(--text-tertiary);
+        }
+
+        .ai-timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .ai-timeline-item {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem 1.25rem;
+            position: relative;
+            transition: all 0.25s ease;
+        }
+
+        .ai-timeline-item:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            background: var(--bg-surface);
+            transform: translateY(-2px);
+        }
+
+        .ai-timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .ai-step-num {
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent);
+            opacity: 0.9;
+        }
+
+        .ai-step-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--text-tertiary);
+        }
+
+        .ai-step-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .ai-step-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .ai-features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .ai-feature-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            display: flex;
+            gap: 1.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .ai-feature-card:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-surface);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .ai-feature-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            background: var(--accent-muted);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: var(--accent-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .ai-feature-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .ai-feature-desc {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+        }
+
+        .ai-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .ai-gallery-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ai-gallery-card:hover {
+            border-color: rgba(59, 130, 246, 0.35);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .ai-gallery-thumb {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            background: #090d16;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ai-gallery-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .ai-gallery-card:hover .ai-gallery-thumb img {
+            transform: scale(1.04);
+        }
+
+        .ai-gallery-overlay-hint {
+            position: absolute;
+            inset: 0;
+            background: rgba(12, 15, 23, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: #fff;
+            font-size: 0.8rem;
+            font-family: var(--font-mono);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            backdrop-filter: blur(2px);
+        }
+
+        .ai-gallery-card:hover .ai-gallery-overlay-hint { opacity: 1; }
+
+        .ai-gallery-info { padding: 1rem 1.25rem; }
+        .ai-gallery-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .ai-gallery-caption {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+        }
+
+        .ai-stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            background: linear-gradient(180deg, var(--bg-elevated) 0%, rgba(19, 24, 36, 0.8) 100%);
+            border: 1px solid var(--border-hover);
+            border-radius: var(--radius);
+            padding: 1.75rem 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .ai-stat-unit {
+            text-align: center;
+            border-right: 1px solid var(--border);
+            padding: 0 0.5rem;
+        }
+
+        .ai-stat-unit:last-child { border-right: none; }
+
+        .ai-stat-number {
+            font-family: var(--font-mono);
+            font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+            font-weight: 700;
+            color: #60a5fa;
+            line-height: 1.1;
+            margin-bottom: 0.35rem;
+        }
+
+        .ai-stat-label {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.35;
+        }
+
+        .ai-cta-card {
+            background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.12) 0%, var(--bg-elevated) 70%);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: var(--radius);
+            padding: 2.25rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-cta-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.6rem;
+        }
+
+        .ai-cta-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            max-width: 620px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+        }
+
+        .ai-lightbox-modal .modal {
+            max-width: 1050px;
+            background: #090d16;
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .ai-lightbox-body { padding: 1rem 1.25rem 1.25rem; }
+        .ai-lightbox-img {
+            width: 100%;
+            height: auto;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            display: block;
+        }
+
+        /* EXISTING PROJECTS GRID & SIDEBAR */
         .main-grid {
             display: grid;
             grid-template-columns: 1fr 320px;
@@ -236,6 +672,7 @@
             transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
+            margin-bottom: 1rem;
         }
 
         .project::before {
@@ -257,9 +694,7 @@
             box-shadow: var(--shadow);
         }
 
-        .project:hover::before {
-            opacity: 1;
-        }
+        .project:hover::before { opacity: 1; }
 
         .project-header {
             display: flex;
@@ -269,9 +704,7 @@
             margin-bottom: 0.75rem;
         }
 
-        .project-title-group {
-            flex: 1;
-        }
+        .project-title-group { flex: 1; }
 
         .project-title {
             font-size: 1.1rem;
@@ -362,9 +795,7 @@
             transition: transform 0.2s ease;
         }
 
-        .project-link:hover::after {
-            transform: translateX(2px);
-        }
+        .project-link:hover::after { transform: translateX(2px); }
 
         .project-tags {
             display: flex;
@@ -422,10 +853,7 @@
             line-height: 1.6;
         }
 
-        .expertise-list {
-            list-style: none;
-        }
-
+        .expertise-list { list-style: none; }
         .expertise-list li {
             font-size: 0.85rem;
             color: var(--text-secondary);
@@ -436,10 +864,7 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .expertise-list li:last-child {
-            border-bottom: none;
-        }
-
+        .expertise-list li:last-child { border-bottom: none; }
         .expertise-list li::before {
             content: '▸';
             color: var(--accent);
@@ -523,14 +948,13 @@
             transition: color 0.2s ease;
         }
 
-        .footer-links a:hover {
-            color: var(--text-primary);
-        }
+        .footer-links a:hover { color: var(--text-primary); }
 
+        /* MODAL STYLES */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
@@ -561,9 +985,7 @@
             transition: transform 0.25s ease;
         }
 
-        .modal-overlay.active .modal {
-            transform: translateY(0);
-        }
+        .modal-overlay.active .modal { transform: translateY(0); }
 
         .modal-header {
             padding: 1.5rem 1.5rem 0;
@@ -591,13 +1013,8 @@
             flex-shrink: 0;
         }
 
-        .modal-close:hover {
-            color: var(--text-primary);
-        }
-
-        .modal-body {
-            padding: 1rem 1.5rem 1.5rem;
-        }
+        .modal-close:hover { color: var(--text-primary); }
+        .modal-body { padding: 1rem 1.5rem 1.5rem; }
 
         .modal-desc {
             font-size: 0.9rem;
@@ -629,10 +1046,6 @@
             display: flex;
             gap: 0.75rem;
             flex-wrap: wrap;
-        }
-
-        .modal-actions .project-link {
-            padding: 0.6rem 1.25rem;
         }
 
         .btn-secondary {
@@ -679,10 +1092,7 @@
             transition: all 0.2s ease;
         }
 
-        .tab-btn:hover {
-            color: var(--text-secondary);
-        }
-
+        .tab-btn:hover { color: var(--text-secondary); }
         .tab-btn.active {
             color: var(--accent);
             border-bottom-color: var(--accent);
@@ -755,7 +1165,13 @@
         .instruction-content tr:last-child td { border-bottom: none; }
         .instruction-content tbody tr:hover { background: rgba(59, 130, 246, 0.04); }
 
-        @media (max-width: 900px) {
+        /* RESPONSIVE */
+        @media (max-width: 1000px) {
+            .ai-hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .ai-timeline-grid { grid-template-columns: repeat(2, 1fr); }
+            .ai-gallery-grid { grid-template-columns: 1fr; }
+            .ai-stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 0.5rem; }
+            .ai-stat-unit:nth-child(2) { border-right: none; }
             .main-grid { grid-template-columns: 1fr; }
             .sidebar { order: -1; }
             .metrics { grid-template-columns: repeat(2, 1fr); }
@@ -768,6 +1184,11 @@
             .metrics { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
             .metric { padding: 1rem; }
             .metric-value { font-size: 1.4rem; }
+            .ai-hero-card { padding: 1.5rem 1.25rem; }
+            .ai-timeline-grid { grid-template-columns: 1fr; }
+            .ai-features-grid { grid-template-columns: 1fr; }
+            .ai-stats-bar { grid-template-columns: 1fr 1fr; }
+            .ai-feature-card { padding: 1.25rem; }
             .project-features { grid-template-columns: 1fr; }
             .project-footer { flex-direction: column; align-items: flex-start; }
             .tabs { padding: 0 1rem; }
@@ -798,19 +1219,19 @@
                 <div class="header-meta">
                     <span>📍 Россия</span>
                     <span>⚡ Ведущий инженер-технолог</span>
-                    <span>🛠️ 3 инженерных продукта</span>
+                    <span>🛠️ 4 инженерных продукта</span>
                 </div>
             </div>
             <div style="text-align: right;">
                 <span class="status-badge">Промышленный софт</span>
-                <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-tertiary);">Автоматизация расчётов</div>
+                <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-tertiary);">Автоматизация расчётов & AI</div>
             </div>
         </div>
     </header>
 
     <div class="metrics">
         <div class="metric">
-            <div class="metric-value">3</div>
+            <div class="metric-value">4</div>
             <div class="metric-label">Инженерных<br>продукта</div>
         </div>
         <div class="metric">
@@ -827,6 +1248,237 @@
         </div>
     </div>
 
+    <!-- =======================================================================
+         ESP AI ANALYZER — ENTERPRISE TELEMETRY SAAS MODULE
+         ======================================================================= -->
+    <section class="ai-section" id="esp-ai-analyzer" aria-labelledby="ai-hero-title">
+        
+        <!-- Hero Platform Card -->
+        <div class="ai-hero-card">
+            <div class="ai-hero-grid">
+                <div>
+                    <div class="ai-badge-group">
+                        <span class="ai-badge"><span class="ai-badge-pulse"></span>ESP AI AGENT · NEXT GEN</span>
+                        <span class="status-badge" style="background: rgba(148, 163, 184, 0.08); border-color: var(--border); color: var(--text-secondary);">Телеметрия УЭЦН</span>
+                    </div>
+                    <h2 id="ai-hero-title" class="ai-hero-title">ESP AI <span>ANALYZER</span></h2>
+                    <div class="ai-hero-subtitle">Интеллектуальный анализ фонда УЭЦН с автоматическим выявлением отклонений и формированием инженерных рекомендаций</div>
+                    <p class="ai-hero-desc">
+                        Система анализирует данные станций управления, сравнивает фактические параметры с заданными требованиями и помогает технологам быстрее выявлять проблемы эксплуатации.
+                    </p>
+                    <div class="ai-hero-actions">
+                        <a href="#ai-features" class="project-link">Подробнее о модуле</a>
+                        <span class="btn-status-outline">⚡ Проект в разработке</span>
+                    </div>
+                </div>
+
+                <div class="ai-mockup-frame" onclick="openLightbox('image.png', 'ESP AI ANALYZER — Диагностический дашборд скважины №214')" role="button" tabindex="0" title="Нажмите для увеличения">
+                    <div class="ai-mockup-bar">
+                        <div class="ai-mockup-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <span class="ai-mockup-tag">ESP_AI_v2.4 :: Telemetry_Stream</span>
+                        <span style="font-size: 0.7rem; color: var(--accent);">🔍 Zoom</span>
+                    </div>
+                    <div class="ai-mockup-img-wrap">
+                        <img src="image.png" alt="Интерфейс AI-анализатора параметров УЭЦН" class="ai-mockup-img" loading="lazy" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Timeline -->
+        <div class="ai-subheading-group">
+            <h3 class="ai-subheading-title">Как работает система</h3>
+            <p class="ai-subheading-desc">Автоматизированный сквозной цикл от сырой телеметрии до готовых решений</p>
+        </div>
+
+        <div class="ai-timeline-grid">
+            <div class="ai-timeline-item">
+                <div class="ai-timeline-header">
+                    <span class="ai-step-num">01</span>
+                    <svg class="ai-step-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                    </svg>
+                </div>
+                <div class="ai-step-title">Импорт данных</div>
+                <p class="ai-step-desc">Загрузка параметров со станции управления УЭЦН в различных форматах выгрузок.</p>
+            </div>
+
+            <div class="ai-timeline-item">
+                <div class="ai-timeline-header">
+                    <span class="ai-step-num">02</span>
+                    <svg class="ai-step-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <div class="ai-step-title">AI-анализ</div>
+                <p class="ai-step-desc">Обработка данных и выявление закономерностей, скрытых трендов и аномальных режимов.</p>
+            </div>
+
+            <div class="ai-timeline-item">
+                <div class="ai-timeline-header">
+                    <span class="ai-step-num">03</span>
+                    <svg class="ai-step-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <div class="ai-step-title">Контроль параметров</div>
+                <p class="ai-step-desc">Сравнение фактических значений с требованиями заказчика и утверждённой картой уставок.</p>
+            </div>
+
+            <div class="ai-timeline-item">
+                <div class="ai-timeline-header">
+                    <span class="ai-step-num">04</span>
+                    <svg class="ai-step-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+                <div class="ai-step-title">Аналитический отчёт</div>
+                <p class="ai-step-desc">Формирование структурированного результата с рекомендациями для инженера-технолога.</p>
+            </div>
+        </div>
+
+        <!-- Capabilities (4 Cards) -->
+        <div id="ai-features" class="ai-subheading-group">
+            <h3 class="ai-subheading-title">Возможности ESP AI ANALYZER</h3>
+            <p class="ai-subheading-desc">Интеллектуальная помощь инженеру-технологу в поиске проблемных объектов</p>
+        </div>
+
+        <div class="ai-features-grid">
+            <div class="ai-feature-card">
+                <div class="ai-feature-icon-box">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7C5 4 4 5 4 7zM9 9h6M9 13h6M9 17h4" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="ai-feature-title">AI-анализ фонда</div>
+                    <p class="ai-feature-desc">Автоматическая оценка состояния большого количества скважин и ранжирование объектов по уровню риска.</p>
+                </div>
+            </div>
+
+            <div class="ai-feature-card">
+                <div class="ai-feature-icon-box">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="ai-feature-title">Диагностика УЭЦН</div>
+                    <p class="ai-feature-desc">Выявление нестандартных режимов работы оборудования на основе комплексного анализа технологических параметров.</p>
+                </div>
+            </div>
+
+            <div class="ai-feature-card">
+                <div class="ai-feature-icon-box">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="ai-feature-title">Контроль уставок</div>
+                    <p class="ai-feature-desc">Автоматическое сравнение требований заказчика, карты уставок и фактических настроек станции управления.</p>
+                </div>
+            </div>
+
+            <div class="ai-feature-card">
+                <div class="ai-feature-icon-box">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="ai-feature-title">Инженерные отчёты</div>
+                    <p class="ai-feature-desc">Формирование структурированной аналитики с выявленными отклонениями и готовыми рекомендациями.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interface Gallery -->
+        <div class="ai-subheading-group">
+            <h3 class="ai-subheading-title">Интерфейс системы</h3>
+            <p class="ai-subheading-desc">Нажмите на карточку для просмотра интерфейса в высоком разрешении</p>
+        </div>
+
+        <div class="ai-gallery-grid">
+            <div class="ai-gallery-card" onclick="openLightbox('image_3.png', 'Экран 1: Dashboard фонда — Контроль состояния всего фонда')" role="button" tabindex="0">
+                <div class="ai-gallery-thumb">
+                    <img src="image_3.png" alt="Dashboard фонда УЭЦН" loading="lazy" />
+                    <div class="ai-gallery-overlay-hint">
+                        <span>Увеличить скриншот ↗</span>
+                    </div>
+                </div>
+                <div class="ai-gallery-info">
+                    <div class="ai-gallery-title">Dashboard фонда</div>
+                    <div class="ai-gallery-caption">Контроль состояния всего фонда</div>
+                </div>
+            </div>
+
+            <div class="ai-gallery-card" onclick="openLightbox('image.png', 'Экран 2: Анализ скважины — Поиск причин отклонений')" role="button" tabindex="0">
+                <div class="ai-gallery-thumb">
+                    <img src="image.png" alt="Анализ параметров скважины УЭЦН" loading="lazy" />
+                    <div class="ai-gallery-overlay-hint">
+                        <span>Увеличить скриншот ↗</span>
+                    </div>
+                </div>
+                <div class="ai-gallery-info">
+                    <div class="ai-gallery-title">Анализ скважины</div>
+                    <div class="ai-gallery-caption">Поиск причин отклонений</div>
+                </div>
+            </div>
+
+            <div class="ai-gallery-card" onclick="openLightbox('image_2.png', 'Экран 3: Проверка уставок — Контроль соответствия параметров')" role="button" tabindex="0">
+                <div class="ai-gallery-thumb">
+                    <img src="image_2.png" alt="Проверка уставок и сопоставление данных" loading="lazy" />
+                    <div class="ai-gallery-overlay-hint">
+                        <span>Увеличить скриншот ↗</span>
+                    </div>
+                </div>
+                <div class="ai-gallery-info">
+                    <div class="ai-gallery-title">Проверка уставок</div>
+                    <div class="ai-gallery-caption">Контроль соответствия параметров</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Numbers / Advantages Block -->
+        <div class="ai-stats-bar">
+            <div class="ai-stat-unit">
+                <div class="ai-stat-number">128+</div>
+                <div class="ai-stat-label">скважин в анализе</div>
+            </div>
+            <div class="ai-stat-unit">
+                <div class="ai-stat-number">AI</div>
+                <div class="ai-stat-label">автоматический поиск отклонений</div>
+            </div>
+            <div class="ai-stat-unit">
+                <div class="ai-stat-number">24/7</div>
+                <div class="ai-stat-label">контроль параметров</div>
+            </div>
+            <div class="ai-stat-unit">
+                <div class="ai-stat-number">1 отчёт</div>
+                <div class="ai-stat-label">полная аналитика по объекту</div>
+            </div>
+        </div>
+
+        <!-- Section CTA Box -->
+        <div class="ai-cta-card">
+            <div class="ai-cta-title">ESP AI ANALYZER находится в стадии разработки</div>
+            <p class="ai-cta-desc">
+                Новый инструмент позволит сократить время анализа фонда УЭЦН и повысить эффективность инженерных решений.
+            </p>
+            <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <a href="mailto:nosar.andrey@gmail.com?subject=ESP%20AI%20ANALYZER" class="project-link">Следить за развитием проекта</a>
+                <a href="https://github.com/TehnologDevEng" target="_blank" rel="noopener noreferrer" class="btn-secondary">GitHub репозиторий</a>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- =======================================================================
+         EXISTING APPS & CALCULATORS
+         ======================================================================= -->
     <div class="main-grid">
         <section aria-labelledby="projects-heading">
             <div class="section-header">
@@ -949,9 +1601,9 @@
                     <span class="tech-tag">HTML / CSS</span>
                     <span class="tech-tag">JavaScript</span>
                     <span class="tech-tag">GitHub Pages</span>
+                    <span class="tech-tag">AI Telemetry</span>
                     <span class="tech-tag">Инженерные расчёты</span>
                     <span class="tech-tag">Гидродинамика</span>
-                    <span class="tech-tag">Техническая документация</span>
                 </div>
             </div>
 
@@ -986,6 +1638,21 @@
     </footer>
 </div>
 
+<!-- =======================================================================
+     MODALS
+     ======================================================================= -->
+<div id="modal-lightbox" class="modal-overlay ai-lightbox-modal" role="dialog" aria-modal="true" aria-labelledby="modal-lightbox-title">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modal-lightbox-title" class="modal-title" style="font-size: 1.05rem;">Просмотр интерфейса</h2>
+            <button class="modal-close" aria-label="Закрыть окно">&times;</button>
+        </div>
+        <div class="ai-lightbox-body">
+            <img id="lightbox-target-img" src="" alt="Увеличенный скриншот" class="ai-lightbox-img" />
+        </div>
+    </div>
+</div>
+
 <div id="modal-esp" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-esp-title">
     <div class="modal">
         <div class="modal-header">
@@ -1016,134 +1683,14 @@
         <div class="tab-panel" id="tab-esp-instruction" role="tabpanel">
             <div class="instruction-content">
                 <h3>Краткое руководство пользователя (v8.6.1)</h3>
-
                 <h4>1. Назначение программы</h4>
-                <p>ESP Selector — инженерный онлайн-калькулятор для подбора установок электрических центробежных насосов (УЭЦН) к нефтяным скважинам. Программа подбирает насос, погружной электродвигатель (ПЭД) и гидрозащиту, сразу показывая, насколько хорошо оборудование подходит, и предупреждая о возможных проблемах.</p>
-
+                <p>ESP Selector — инженерный онлайн-калькулятор для подбора установок электрических центробежных насосов (УЭЦН) к нефтяным скважинам.</p>
                 <h4>2. Основные входные данные</h4>
                 <ul>
                     <li><strong>Дебит жидкости (Q)</strong> — целевой объём жидкости на устье, м³/сут.</li>
-                    <li><strong>Требуемый напор (H)</strong> — суммарный напор (можно рассчитать автоматически).</li>
-                    <li><strong>Диаметр обсадной колонны</strong> — определяет габарит насоса (2А, 3, 5, 5А, 6, 7А).</li>
-                    <li><strong>Плотность жидкости (ρ)</strong> — влияет на напор и мощность.</li>
-                    <li><strong>Вязкость (μ)</strong> — при >1,1 сП вводится поправка на характеристики насоса.</li>
-                    <li><strong>Температура на приёме</strong> — для выбора термостойкого ПЭД.</li>
-                    <li><strong>Обводнённость, газовый фактор, давление насыщения</strong> — расчёт доли свободного газа.</li>
-                    <li><strong>Частота ЧРП</strong> — рабочая частота (35–200 Гц).</li>
-                    <li><strong>Исполнение насоса</strong> — нирезист или ПКМ.</li>
-                    <li><strong>Газосепаратор</strong> — «Нет», «Газосепаратор» или «Газосепаратор-диспергатор».</li>
-                </ul>
-
-                <h4>3. Как работает алгоритм подбора</h4>
-                <ol>
-                    <li><strong>Пересчёт в номинальные условия (50 Гц)</strong> через законы подобия: Q₅₀ = Q / k, H₅₀ = H / k², где k = F / 50.</li>
-                    <li><strong>Фильтрация по каталогу</strong> (~60 насосов) по габариту, исполнению, рабочей зоне.</li>
-                    <li><strong>Коррекция на вязкость</strong> (если μ > 1,1 сП) по числу Рейнольдса.</li>
-                    <li><strong>Учёт свободного газа</strong> — деградация напора, снижение газосепаратором в 4 или 10 раз.</li>
-                    <li><strong>Подбор ПЭД</strong> с запасом ≈15%, автоматически выбирается тип (асинхронный или вентильный).</li>
-                    <li><strong>Подбор гидрозащиты</strong> по осевой нагрузке.</li>
-                    <li><strong>Оценка совпадения</strong> — рейтинг 0–100 и пометка «★ Лучший выбор».</li>
-                </ol>
-
-                <h4>4. Как читать результаты</h4>
-                <p>После подбора отображаются карточки насосов (до 8 вариантов) с рейтингом, параметрами, подобранным ПЭД и гидрозащитой, предупреждающими бейджами и интерактивными графиками (напор, мощность, КПД, рабочая зона). Маркер цели можно перетаскивать — дебит автоматически обновится.</p>
-
-                <h4>5. Основные возможности</h4>
-                <ul>
-                    <li>Автоматический расчёт напора по глубине спуска и давлениям.</li>
-                    <li>Реалистичные поправки на вязкость и свободный газ.</li>
-                    <li>Частотное регулирование 35–200 Гц с автоматическим выбором вентильного ПЭД.</li>
-                    <li>Цветовая обратная связь на карточках (зелёный/оранжевый/красный).</li>
-                    <li>Сравнение выбранных вариантов в таблице.</li>
-                    <li>Интерактивные графики с экспортом в PNG.</li>
-                    <li>Сохранение/загрузка конфигураций в браузере.</li>
-                    <li>Печать отчёта.</li>
-                    <li>Валидация полей и тёмная/светлая тема.</li>
-                </ul>
-
-                <h4>6. Типичный сценарий работы</h4>
-                <ol>
-                    <li>Введите дебит, плотность, вязкость.</li>
-                    <li>Выберите диаметр обсадной колонны.</li>
-                    <li>Включите автоматический расчёт напора, заполните глубины и давления.</li>
-                    <li>При наличии газа укажите газовый фактор и тип сепаратора.</li>
-                    <li>Установите частоту и исполнение насоса.</li>
-                    <li>Нажмите «Подобрать оборудование».</li>
-                    <li>Оцените лучший вариант, при необходимости сравните и уточните дебит на графике.</li>
-                    <li>Сохраните конфигурацию или распечатайте отчёт.</li>
-                </ol>
-
-                <h4>Как определяется «Лучший выбор»</h4>
-                <p>Score = A + B. A — попадание в рабочую зону (60 если внутри, 20 если нет). B — близость номинальной подачи к целевому дебиту (до 30 баллов). Итоговый балл до 100. Насос с максимальным счётом получает плашку «★ Лучший выбор».</p>
-
-                <h4>Примеры расчёта балла</h4>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Насос</th>
-                            <th>q<sub>min</sub></th>
-                            <th>q<sub>50</sub></th>
-                            <th>q<sub>max</sub></th>
-                            <th>В зоне?</th>
-                            <th>A</th>
-                            <th>Расстояние</th>
-                            <th>B</th>
-                            <th>Итого</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Насос 1 (идеал)</td>
-                            <td>70</td>
-                            <td>80</td>
-                            <td>95</td>
-                            <td>✓</td>
-                            <td>60</td>
-                            <td>0</td>
-                            <td>30</td>
-                            <td><strong>100</strong></td>
-                        </tr>
-                        <tr>
-                            <td>Насос 2</td>
-                            <td>50</td>
-                            <td>75</td>
-                            <td>90</td>
-                            <td>✓</td>
-                            <td>60</td>
-                            <td>5</td>
-                            <td>28</td>
-                            <td>88</td>
-                        </tr>
-                        <tr>
-                            <td>Насос 3</td>
-                            <td>85</td>
-                            <td>100</td>
-                            <td>120</td>
-                            <td>✗</td>
-                            <td>20</td>
-                            <td>20</td>
-                            <td>24</td>
-                            <td>44</td>
-                        </tr>
-                        <tr>
-                            <td>Насос 4 (граница)</td>
-                            <td>60</td>
-                            <td>90</td>
-                            <td>110</td>
-                            <td>✓</td>
-                            <td>60</td>
-                            <td>10</td>
-                            <td>26.7</td>
-                            <td>87</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h4>Важные нюансы</h4>
-                <ul>
-                    <li>Score — чисто гидравлическая оценка, без учёта стоимости и энергопотребления.</li>
-                    <li>Выход за рабочую зону резко снижает балл, такой насос не станет лучшим.</li>
-                    <li>При вязкости и газе номинальные характеристики корректируются, рейтинг остаётся честным.</li>
+                    <li><strong>Требуемый напор (H)</strong> — суммарный напор.</li>
+                    <li><strong>Диаметр обсадной колонны</strong> — габарит насоса.</li>
+                    <li><strong>Плотность и вязкость</strong> — гидродинамические поправки.</li>
                 </ul>
             </div>
         </div>
@@ -1164,11 +1711,7 @@
                 <li>Потери напряжения в кабеле</li>
                 <li>Подбор отпайки ТМПН</li>
                 <li>Частотное регулирование</li>
-                <li>Свободный газ на приёме</li>
-                <li>Охлаждение ПЭД</li>
-                <li>Глушение скважины</li>
                 <li>Выгрузка результатов в PDF и Excel</li>
-                <li>Адаптивный интерфейс для работы с телефона в поле</li>
             </ul>
             <div class="modal-actions">
                 <a href="https://tehnologdeveng.github.io/engineering-calculator/" target="_blank" rel="noopener noreferrer" class="project-link">Открыть калькулятор</a>
@@ -1189,10 +1732,8 @@
             <ul class="modal-features">
                 <li>Расчёт напряжения на всех ступенях отпаек ТМПН</li>
                 <li>Ранжирование топ-3 станций управления по току и мощности</li>
-                <li>База из 40+ моделей СУ (Триол, Электон, Борец, Новомет, Эталон)</li>
-                <li>Учёт коэффициента запаса по току</li>
-                <li>Экспорт результатов в PDF с графиками напряжения</li>
-                <li>Сохранение истории подбора в браузере</li>
+                <li>База из 40+ моделей СУ</li>
+                <li>Экспорт результатов в PDF</li>
             </ul>
             <div class="modal-actions">
                 <a href="https://tehnologdeveng.github.io/Transformer-Oil-filled-for-Submersible-Pumps/" target="_blank" rel="noopener noreferrer" class="project-link">Открыть модуль</a>
@@ -1244,6 +1785,18 @@
             }
         });
     }
+
+    window.openLightbox = function(src, title) {
+        const modal = document.getElementById('modal-lightbox');
+        const img = document.getElementById('lightbox-target-img');
+        const titleElem = document.getElementById('modal-lightbox-title');
+        
+        if (modal && img) {
+            img.src = src;
+            if (title && titleElem) titleElem.textContent = title;
+            openModal(modal);
+        }
+    };
 
     cards.forEach(card => {
         card.addEventListener('click', function(e) {
@@ -1298,22 +1851,6 @@
                 btn.setAttribute('aria-selected', 'true');
                 btn.setAttribute('tabindex', '0');
                 if (targetPanel) targetPanel.classList.add('active');
-            });
-
-            btn.addEventListener('keydown', function(e) {
-                const buttons = Array.from(tabBtns);
-                let index = buttons.indexOf(this);
-                if (e.key === 'ArrowRight') {
-                    e.preventDefault();
-                    index = (index + 1) % buttons.length;
-                    buttons[index].focus();
-                    buttons[index].click();
-                } else if (e.key === 'ArrowLeft') {
-                    e.preventDefault();
-                    index = (index - 1 + buttons.length) % buttons.length;
-                    buttons[index].focus();
-                    buttons[index].click();
-                }
             });
         });
     });
