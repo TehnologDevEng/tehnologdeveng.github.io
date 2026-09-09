@@ -1,0 +1,6 @@
+{
+  "name": "Инженерные инструменты УЭЦН & ESP AI ANALYZER",
+  "description": "Портфолио и инженерные веб-инструменты Андрея Носара: подбор УЭЦН, инженерный калькулятор, расчет отпаек ТМПН и ESP AI ANALYZER.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

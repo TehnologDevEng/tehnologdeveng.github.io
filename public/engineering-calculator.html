@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Инженерный калькулятор технолога УЭЦН v4.0 PRO</title>
+  <meta name="description" content="Инженерный программный комплекс технолога УЭЦН с изолированными модулями: расчет ПВ и ПКВ (циклический режим), расчет колонны НКТ (МКТ), гидравлика и приток Кпр, электрооборудование (СУ, ТМПН, кабель), охлаждение ПЭД и глушение скважины." />
+  <style>
+    :root {
+      --bg: #090d16;
+      --card: #101625;
+      --card-border: #1e293b;
+      --card-header-bg: #0d1320;
+      --input-bg: #070a12;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #38bdf8;
+      --accent-amber: #f59e0b;
+      --accent-emerald: #10b981;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 13.5px;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 70px;
+    }
+
+    header {
+      background: #060911;
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, #1e40af, #2563eb);
+      color: #fff;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .brand-h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-outline { background: rgba(255,255,255,0.04); color: var(--text); border-color: var(--card-border); }
+    .btn-outline:hover { background: rgba(255,255,255,0.08); border-color: #334155; }
+    .btn-amber { background: #b45309; color: #fff; }
+    .btn-amber:hover { background: #d97706; }
+
+    .app-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Summary Bar */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .summary-card {
+      background: #0e1422;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .summary-title {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .summary-val {
+      font-size: 17px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--text);
+      margin: 2px 0;
+    }
+    .summary-sub {
+      font-size: 10.5px;
+      color: #38bdf8;
+    }
+
+    /* Navigation Tabs */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 18px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: thin;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      padding: 10px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.15s;
+      border-radius: 6px 6px 0 0;
+    }
+    .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.03); }
+    .tab-btn.active {
+      color: #fff;
+      border-bottom-color: var(--accent);
+      background: rgba(56, 189, 248, 0.08);
+      font-weight: 700;
+    }
+
+    .tab-btn.tab-pkv.active {
+      border-bottom-color: var(--accent-amber);
+      background: rgba(245, 158, 11, 0.09);
+    }
+    .tab-btn.tab-nkt.active {
+      border-bottom-color: #a855f7;
+      background: rgba(168, 85, 247, 0.09);
+    }
+
+    /* Grid Layouts */
+    .module-grid-two {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 1024px) {
+      .module-grid-two {
+        grid-template-columns: 460px 1fr;
+      }
+      .module-grid-equal {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .module-grid-three {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+      }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .card-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-blue { background: rgba(37, 99, 235, 0.2); color: #60a5fa; border: 1px solid rgba(37, 99, 235, 0.4); }
+    .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-amber { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .badge-purple { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+    .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+    label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    label .unit {
+      color: var(--accent);
+      font-family: var(--font-mono);
+    }
+    input[type="number"], select, input[type="text"] {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 7px 10px;
+      border-radius: 7px;
+      font-size: 12.5px;
+      font-family: var(--font-mono);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input[type="number"]:focus, select:focus, input[type="text"]:focus {
+      border-color: var(--primary);
+    }
+
+    /* Sub-section headers */
+    .sub-head {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent);
+      font-weight: 700;
+      margin: 14px 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sub-head.amber { color: var(--accent-amber); }
+    .sub-head.purple { color: #c084fc; }
+
+    /* Result Displays */
+    .result-box {
+      background: #090d16;
+      border: 1px solid var(--card-border);
+      border-radius: 9px;
+      padding: 12px;
+    }
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 12px;
+    }
+    .result-row:last-child {
+      border-bottom: none;
+    }
+    .result-label {
+      color: var(--text-muted);
+    }
+    .result-val {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: #fff;
+    }
+    .result-val.highlight {
+      color: var(--accent);
+      font-size: 13.5px;
+    }
+    .result-val.amber {
+      color: var(--accent-amber);
+      font-size: 13.5px;
+    }
+    .result-val.purple {
+      color: #c084fc;
+      font-size: 13.5px;
+    }
+    .result-val.success { color: var(--success); }
+    .result-val.warning { color: var(--warning); }
+    .result-val.danger { color: var(--danger); }
+
+    .callout {
+      background: rgba(37, 99, 235, 0.08);
+      border-left: 3px solid var(--primary);
+      padding: 10px 12px;
+      border-radius: 0 8px 8px 0;
+      font-size: 11.5px;
+      color: #cbd5e1;
+      margin-top: 12px;
+      line-height: 1.45;
+    }
+    .callout.amber {
+      background: rgba(245, 158, 11, 0.08);
+      border-left-color: var(--warning);
+    }
+    .callout.purple {
+      background: rgba(168, 85, 247, 0.08);
+      border-left-color: #a855f7;
+    }
+    .callout.success {
+      background: rgba(16, 185, 129, 0.08);
+      border-left-color: var(--success);
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      text-align: left;
+    }
+    th, td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    th {
+      background: #090e1a;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+    tr.active-row td {
+      background: rgba(37, 99, 235, 0.15);
+      font-weight: bold;
+      color: #93c5fd;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: #fff !important;
+        color: #000 !important;
+      }
+      header, .tab-bar, .top-actions, input[type="range"] {
+        display: none !important;
+      }
+      .card {
+        background: #fff !important;
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        margin-bottom: 20px;
+      }
+      .result-box {
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+      }
+      .result-val, .result-label, th, td, label, .card-title {
+        color: #000 !important;
+      }
+      .tab-content {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="header-inner">
+      <div class="brand-title">
+        <span class="logo-badge">УЭЦН · PRO v4.0</span>
+        <div>
+          <div class="brand-h1">
+            Инженерный калькулятор технолога
+          </div>
+          <div class="brand-sub">
+            Модули: ПВ/ПКВ · Колонна НКТ · Гидравлика & Кпр · СУ и ТМПН · Охлаждение ПЭД & Глушение
+          </div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button type="button" class="btn btn-outline" onclick="loadDefaultPreset()">
+          🔄 Сброс эталона
+        </button>
+        <button type="button" class="btn btn-outline" onclick="saveToLocal()">
+          💾 Сохранить
+        </button>
+        <button type="button" class="btn btn-primary" onclick="exportPrint()">
+          🖨️ Печать / PDF
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+
+    <!-- Summary Key Metrics Banner -->
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-title">Режим ПКВ (Цикл)</div>
+        <div class="summary-val" id="sumPkvRatio">-- ч / -- ч</div>
+        <div class="summary-sub" id="sumPkvCycles">-- циклов/сут</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-title">Потери в НКТ (ΔPтр)</div>
+        <div class="summary-val" id="sumNktFriction">-- атм</div>
+        <div class="summary-sub" id="sumNktSpeed">v = -- м/с</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-title">Давление на приеме Pпр</div>
+        <div class="summary-val" id="sumPpr">-- атм</div>
+        <div class="summary-sub" id="sumPprStatus">Запас над Pнас</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-title">Газ на входе β</div>
+        <div class="summary-val" id="sumGas">-- %</div>
+        <div class="summary-sub" id="sumGasStatus">Входной модуль</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-title">Отпайка ТМПН</div>
+        <div class="summary-val" id="sumTap">-- В</div>
+        <div class="summary-sub" id="sumTapSub">ΔUкаб: -- В</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-title">Рекомендованная СУ</div>
+        <div class="summary-val" id="sumSU">--</div>
+        <div class="summary-sub" id="sumSUSub">Запас: -- %</div>
+      </div>
+    </div>
+
+    <!-- Clear Section Tabs -->
+    <div class="tab-bar">
+      <button class="tab-btn tab-pkv active" onclick="switchTab('tab-pkv')">
+        ⏱️ МОДУЛЬ 1: Расчёт ПВ и ПКВ (Циклический режим)
+      </button>
+      <button class="tab-btn tab-nkt" onclick="switchTab('tab-nkt')">
+        🔩 МОДУЛЬ 2: Трубы НКТ (Трение, Прочность, Вынос)
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-hydraulics')">
+        💧 МОДУЛЬ 3: Гидравлика, Приток & Кпр
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-electro')">
+        ⚡ МОДУЛЬ 4: СУ, ТМПН и Кабельная линия
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-cooling-kill')">
+        ❄️ МОДУЛЬ 5: Охлаждение ПЭД & Глушение
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-report')">
+        📋 МОДУЛЬ 6: Сводный протокол и техкарта
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-reference')">
+        📚 Справочник
+      </button>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 1: РАСЧЁТ ПВ И ПКВ (ПЕРИОДИЧЕСКАЯ ЭКСПЛУАТАЦИЯ)     -->
+    <!-- ======================================================== -->
+    <div id="tab-pkv" class="tab-content">
+      <div class="module-grid-two">
+        
+        <!-- Left: PKV Inputs -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">⏱️ Исходные параметры ПКВ / ПВ скважины</span>
+            <span class="badge badge-amber">Периодический режим</span>
+          </div>
+
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 12px;">
+            Расчёт программы кратковременного пуска (ПКВ) или периодического включения (ПВ) для малодебитных скважин при откачке насосом повышенной производительности.
+          </p>
+
+          <div class="sub-head amber">1. Характеристики притока и насоса</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Фактический приток пласта Qпл <span class="unit">м³/сут</span></label>
+              <input type="number" id="pkvQplast" value="12" step="0.5" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Подача насоса при работе Qнас <span class="unit">м³/сут</span></label>
+              <input type="number" id="pkvQpump" value="45" step="1" oninput="calculateAll()" />
+            </div>
+          </div>
+
+          <div class="sub-head amber">2. Уровни и геометрия затрубного пространства</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Верхний статический уровень Hстат <span class="unit">м</span></label>
+              <input type="number" id="pkvHstat" value="850" step="10" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Нижний динамический уровень Hдин.отк <span class="unit">м</span></label>
+              <input type="number" id="pkvHdyn" value="1450" step="10" oninput="calculateAll()" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Внутренний диаметр ЭК Dвн <span class="unit">мм</span></label>
+              <input type="number" id="pkvCasingId" value="130" step="1" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Диаметр колонны НКТ <span class="unit">мм</span></label>
+              <select id="pkvTubingD" onchange="calculateAll()">
+                <option value="60">60 мм (Наружный 60.3 мм)</option>
+                <option value="73" selected>73 мм (Наружный 73.0 мм)</option>
+                <option value="89">89 мм (Наружный 88.9 мм)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="sub-head amber">3. Технологические ограничения программы ПКВ</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Макс. допустимо пусков ПЭД в сутки <span class="unit">пусков</span></label>
+              <input type="number" id="pkvMaxStarts" value="12" min="1" max="48" step="1" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Мин. пауза остывания ПЭД Tпауз.мин <span class="unit">мин</span></label>
+              <input type="number" id="pkvMinCoolMin" value="45" step="5" oninput="calculateAll()" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Способ задания режима в СУ</label>
+            <select id="pkvModeType" onchange="calculateAll()">
+              <option value="auto" selected>Оптимальный расчёт по уровням (ΔH накопления)</option>
+              <option value="fixed-pump">Фиксированное время откачки (например, 1.5 ч)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Right: PKV Calculations -->
+        <div class="space-y-4">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📊 Результаты расчёта цикла ПКВ / ПВ</span>
+              <span class="badge badge-amber" id="pkvBadge">Режим ПКВ оптимален</span>
+            </div>
+
+            <div class="result-box">
+              <div class="result-row">
+                <span class="result-label">Высота столба накопления жидкости ΔH:</span>
+                <span class="result-val amber" id="resPkvDeltaH">600 м</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Удельная емкость затрубного пространства:</span>
+                <span class="result-val" id="resPkvAnnulusCap">9.08 л/м (0.0091 м³/м)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Объём жидкости за 1 цикл накопления Vцикл:</span>
+                <span class="result-val highlight" id="resPkvVolCycle">5.45 м³</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Расчётное время накопления (пауза ПЭД) Tнак:</span>
+                <span class="result-val highlight" style="color: #fbbf24" id="resPkvTaccum">10.9 час (654 мин)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Расчётное время откачки (работа ПЭД) Tотк:</span>
+                <span class="result-val highlight" style="color: #34d399" id="resPkvTpump">3.96 час (238 мин)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Полный период одного цикла Tобщ:</span>
+                <span class="result-val" id="resPkvTtotal">14.9 час</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Коэффициент цикличности Кц (Tотк / Tобщ):</span>
+                <span class="result-val" id="resPkvKcycle">0.267 (26.7%)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Количество включений УЭЦН в сутки n:</span>
+                <span class="result-val" id="resPkvStartsPerDay">1.6 пуска/сут</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Фактическая суточная добыча жидкости Qсут:</span>
+                <span class="result-val highlight" id="resPkvActualQ">12.0 м³/сут</span>
+              </div>
+            </div>
+
+            <div class="callout amber" id="pkvCallout">
+              Программа ПКВ сбалансирована: дебит насоса 45 м³/сут за 3.96 ч откачивает накопившийся столб жидкости, обеспечивая суточный отбор 12.0 м³/сут без срыва подачи.
+            </div>
+          </div>
+
+          <!-- PKV Schedule Card -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🕒 Технологическая уставка для Станции Управления (СУ)</span>
+              <span class="badge badge-blue">Параметры уставки</span>
+            </div>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Параметр программы СУ</th>
+                    <th>Ед. изм.</th>
+                    <th>Значение</th>
+                    <th>Примечание</th>
+                  </tr>
+                </thead>
+                <tbody id="pkvSettingsTable">
+                  <!-- JS generated -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout success" style="margin-top: 10px;">
+              💡 <strong>Совет технологу:</strong> Наличие ЧРП позволяет снизить частоту до 40–42 Гц во время откачки, что увеличивает время работы УЭЦН и улучшает охлаждение ПЭД при снижении пусковых токов.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 2: РАСЧЁТ ПО ТРУБАМ НКТ (МКТ)                       -->
+    <!-- ======================================================== -->
+    <div id="tab-nkt" class="tab-content" style="display: none;">
+      <div class="module-grid-two">
+        
+        <!-- Left: NKT Inputs -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🔩 Параметры подвески колонны НКТ (МКТ)</span>
+            <span class="badge badge-purple">Трубы НКТ</span>
+          </div>
+
+          <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 12px;">
+            Расчёт гидравлических сопротивлений трения потока в НКТ по формуле Альтшуля/Дарси-Вейсбаха, скорости восходящего потока для выноса песка/парафина и статической прочности колонны.
+          </p>
+
+          <div class="sub-head purple">1. Конструкция и геометрия колонны НКТ</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Типоразмер и диаметр НКТ</label>
+              <select id="nktSizeSelect" onchange="calculateAll()">
+                <option value="60">НКТ 60 (Внутр. 50.3 мм, толщ. 5.0 мм)</option>
+                <option value="73" selected>НКТ 73 (Внутр. 62.0 мм, толщ. 5.5 мм)</option>
+                <option value="89">НКТ 89 (Внутр. 75.9 мм, толщ. 6.5 мм)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Группа прочности стали НКТ</label>
+              <select id="nktSteelGrade" onchange="calculateAll()">
+                <option value="D" selected>Группа «Д» (σт = 379 МПа)</option>
+                <option value="K">Группа «К» (σт = 490 МПа)</option>
+                <option value="E">Группа «Е» (σт = 552 МПа)</option>
+                <option value="L">Группа «Л» (σт = 655 МПа)</option>
+                <option value="M">Группа «М» (σт = 724 МПа)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Глубина спуска колонны Hсп <span class="unit">м</span></label>
+              <input type="number" id="nktLength" value="1750" step="10" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Исполнение НКТ</label>
+              <select id="nktType" onchange="calculateAll()">
+                <option value="smooth" selected>Гладкие НКТ (ГОСТ 633-80)</option>
+                <option value="upset">НКТ-В с высаженными концами</option>
+                <option value="coated">С внутренним полимерным покрытием</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="sub-head purple">2. Параметры транспортируемого флюида</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Дебит подъёма жидкости Q <span class="unit">м³/сут</span></label>
+              <input type="number" id="nktFlowQ" value="85" step="1" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Вязкость смеси при откачке μ <span class="unit">сСт (мм²/с)</span></label>
+              <input type="number" id="nktViscosity" value="14" step="0.5" oninput="calculateAll()" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Плотность жидкости ρсм <span class="unit">кг/м³</span></label>
+              <input type="number" id="nktDensity" value="980" step="5" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Вес погружного агрегата (УЭЦН+кабель) <span class="unit">кг</span></label>
+              <input type="number" id="nktEspWeight" value="1850" step="50" oninput="calculateAll()" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: NKT Calculations -->
+        <div class="space-y-4">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📈 Гидравлический расчёт потока в НКТ</span>
+              <span class="badge badge-purple" id="nktHydBadge">Турбулентный режим</span>
+            </div>
+
+            <div class="result-box">
+              <div class="result-row">
+                <span class="result-label">Внутренний диаметр трубы dвн:</span>
+                <span class="result-val purple" id="resNktInnerD">62.0 мм</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Скорость восходящего потока в НКТ v:</span>
+                <span class="result-val highlight" id="resNktVelocity">0.32 м/с</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Число Рейнольдса Re:</span>
+                <span class="result-val" id="resNktReynolds">1417 (Ламинарный/переходный)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Коэффициент гидравлического трения λ:</span>
+                <span class="result-val" id="resNktLambda">0.0451</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Потери напора на трение hтр:</span>
+                <span class="result-val highlight" id="resNktHeadLoss">6.8 м</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Потери давления на трение в колонне ΔPтр:</span>
+                <span class="result-val purple" id="resNktPressLoss">0.65 атм (0.066 МПа)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Оценка выноса механических примесей:</span>
+                <span class="result-val" id="resNktSandCarry">Риск оседания песка (v &lt; 0.6 м/с)</span>
+              </div>
+            </div>
+
+            <div class="callout purple" id="nktHydCallout">
+              При дебите 85 м³/сут в трубе НКТ 73 мм гидравлические потери трения малы (0.65 атм), однако скорость восходящего потока составляет 0.32 м/с. При наличии мехпримесей рекомендуется уменьшить диаметр НКТ до 60 мм для подъема скорости до 0.50 м/с.
+            </div>
+          </div>
+
+          <!-- NKT Strength & Stress -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🛡️ Прочностной расчёт колонны НКТ</span>
+              <span class="badge badge-green" id="nktStrengthBadge">Запас прочности в норме</span>
+            </div>
+
+            <div class="result-box">
+              <div class="result-row">
+                <span class="result-label">Собственный вес колонны НКТ в воздухе:</span>
+                <span class="result-val" id="resNktWeightAir">16 100 кг (158 кН)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Вес в жидкости с учётом силы Архимеда:</span>
+                <span class="result-val" id="resNktWeightFluid">14 080 кг (138 кН)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Суммарная нагрузка на верхнюю трубу Qмакс:</span>
+                <span class="result-val highlight" id="resNktTotalTension">15 930 кг (156.3 кН)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Допустимая нагрузка на растяжение (текучесть):</span>
+                <span class="result-val" id="resNktAllowTension">44 200 кг (433.6 кН)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Коэффициент запаса прочности kзап:</span>
+                <span class="result-val success" id="resNktSafetyFactor">2.77 (Норма ≥ 1.50)</span>
+              </div>
+            </div>
+
+            <div class="callout success">
+              Колонна труб НКТ обладает достаточным запасом статической прочности (k = 2.77). Риск обрыва колонны под действием собственного веса и веса УЭЦН исключён.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 3: ГИДРАВЛИКА СКВАЖИНЫ, ПРИТОК И Кпр                 -->
+    <!-- ======================================================== -->
+    <div id="tab-hydraulics" class="tab-content" style="display: none;">
+      <div class="module-grid-two">
+        
+        <!-- Left: Hydraulic Inputs -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">💧 Входные параметры скважины и пласта</span>
+            <span class="badge badge-blue">Пласт & Устье</span>
+          </div>
+
+          <div class="sub-head">1. Приток и пластовые условия</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Пластовое давление Pпл <span class="unit">атм</span></label>
+              <input type="number" id="pPlast" value="180" step="1" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Давление насыщения Pнас <span class="unit">атм</span></label>
+              <input type="number" id="pSat" value="85" step="1" oninput="calculateAll()" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Газовый фактор G₀ <span class="unit">м³/м³</span></label>
+              <input type="number" id="gasFactor" value="45" step="1" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Глубина пласта (ВРП) <span class="unit">м</span></label>
+              <input type="number" id="depthPlast" value="2350" step="10" oninput="calculateAll()" />
+            </div>
+          </div>
+
+          <div class="sub-head">2. Параметры работы скважины</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Дебит жидкости Q <span class="unit">м³/сут</span></label>
+              <input type="number" id="flowRate" value="85" step="1" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Динамический уровень Hдин <span class="unit">м</span></label>
+              <input type="number" id="dynLevel" value="1420" step="10" oninput="calculateAll()" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Глубина спуска насоса Hсп <span class="unit">м</span></label>
+              <input type="number" id="pumpDepth" value="1750" step="10" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Давление в затрубе Pзатр <span class="unit">атм</span></label>
+              <input type="number" id="pZatr" value="14" step="0.5" oninput="calculateAll()" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Буферное давление Pбуф <span class="unit">атм</span></label>
+              <input type="number" id="pBuf" value="18" step="0.5" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Обводненность W <span class="unit">%</span></label>
+              <input type="number" id="waterCut" value="65" step="1" min="0" max="100" oninput="calculateAll()" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Плотность нефти <span class="unit">кг/м³</span></label>
+              <input type="number" id="oilDensity" value="860" step="5" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Плотность пластовой воды <span class="unit">кг/м³</span></label>
+              <input type="number" id="waterDensity" value="1080" step="5" oninput="calculateAll()" />
+            </div>
+          </div>
+
+          <div class="sub-head">3. Частота тока СУ (ЧРП)</div>
+          <div class="form-group">
+            <label>Рабочая частота f: <span class="unit" id="lblFreq">50 Гц</span></label>
+            <input type="range" id="freqSlider" min="35" max="65" step="1" value="50" oninput="document.getElementById('lblFreq').innerText=this.value+' Гц'; calculateAll();" />
+          </div>
+        </div>
+
+        <!-- Right: Hydraulic Results -->
+        <div class="space-y-4">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🎯 Расчет давлений и продуктивности</span>
+              <span class="badge badge-green" id="resProdBadge">Приток стабилен</span>
+            </div>
+
+            <div class="result-box">
+              <div class="result-row">
+                <span class="result-label">Средняя плотность жидкости ρсм:</span>
+                <span class="result-val" id="resMixDensity">1003 кг/м³</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Давление на приеме насоса Pпр:</span>
+                <span class="result-val highlight" id="resPpr">46.4 атм</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Запас над давлением насыщения (Pпр - Pнас):</span>
+                <span class="result-val" id="resDeltaSat">-38.6 атм (Газовый режим!)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Забойное давление Pзаб:</span>
+                <span class="result-val highlight" id="resPzab">105.2 атм</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Депрессия на пласт (Pпл - Pзаб):</span>
+                <span class="result-val" id="resDepression">74.8 атм</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Коэффициент продуктивности пласта Кпр:</span>
+                <span class="result-val highlight" style="color: #38bdf8" id="resKpr">1.14 м³/(сут·атм)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Потенциальный дебит при Pзаб = Pнас:</span>
+                <span class="result-val" id="resQpot">108 м³/сут</span>
+              </div>
+            </div>
+
+            <div class="callout" id="hydraulicsCallout">
+              Давление на приеме насоса ниже давления насыщения (Pпр < Pнас). В затрубном пространстве и на входе в насос происходит выделение свободного попутного газа.
+            </div>
+          </div>
+
+          <!-- Free Gas β Module -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">💨 Газосодержание на входе в насос (βвх)</span>
+              <span class="badge badge-amber" id="resGasBadge">Средний газ</span>
+            </div>
+
+            <div class="result-box">
+              <div class="result-row">
+                <span class="result-label">Объем свободного газа при рабочих условиях:</span>
+                <span class="result-val" id="resFreeGasVol">21.4 м³/сут</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Объемное газосодержание на приеме βвх:</span>
+                <span class="result-val highlight" id="resBetaIn">18.4 %</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Рекомендованная комплектация узла приема:</span>
+                <span class="result-val" id="resGasEquip">Газосепаратор центробежный (МН-ГС5)</span>
+              </div>
+            </div>
+
+            <div class="callout" id="gasCalloutBox">
+              Газосодержание β = 18.4%. Для стандартного входного модуля предел 25%. Рекомендуется газосепаратор центробежного типа для исключения срыва подачи.
+            </div>
+          </div>
+
+          <!-- Pump VFD scaling -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📊 Пересчет по законам подобия ЧРП</span>
+              <span class="badge badge-blue" id="resFreqBadge">f = 50 Гц</span>
+            </div>
+            <div class="result-box">
+              <div class="result-row">
+                <span class="result-label">Дебит при текущей частоте Q(f):</span>
+                <span class="result-val highlight" id="resFreqQ">85.0 м³/сут</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Развиваемый напор насоса H(f):</span>
+                <span class="result-val highlight" id="resFreqH">1620 м</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Потребляемая мощность на валу N(f):</span>
+                <span class="result-val" id="resFreqP">34.8 кВт</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 4: СУ, ТМПН И КАБЕЛЬНАЯ ЛИНИЯ (ЭЛЕКТРОТЕХНИКА)        -->
+    <!-- ======================================================== -->
+    <div id="tab-electro" class="tab-content" style="display: none;">
+      <div class="module-grid-two">
+        
+        <!-- Inputs Left Column -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🔌 Параметры электрооборудования УЭЦН</span>
+            <span class="badge badge-blue">Электротехника</span>
+          </div>
+
+          <div class="sub-head">1. Погружной электродвигатель (ПЭД)</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Мощность ПЭД <span class="unit">кВт</span></label>
+              <input type="number" id="pedPower" value="45" step="1" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Номин. ток Iном <span class="unit">А</span></label>
+              <input type="number" id="pedCurrent" value="34" step="0.5" oninput="calculateAll()" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Номин. напряжение Uном <span class="unit">В</span></label>
+              <input type="number" id="pedVoltage" value="1050" step="10" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Коэффициент cos φ</label>
+              <input type="number" id="pedCosPhi" value="0.84" step="0.01" min="0.5" max="0.99" oninput="calculateAll()" />
+            </div>
+          </div>
+
+          <div class="sub-head">2. Кабельная линия</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Марка силового кабеля</label>
+              <select id="cableType" onchange="calculateAll()">
+                <option value="kpb-120">КПбП-120 (Блочный, 120°C)</option>
+                <option value="kpsp-120">КПсПБ-120 (Самоспекающийся, 120°C)</option>
+                <option value="kppb-130" selected>КПпБП-130 (Полипропилен, 130°C)</option>
+                <option value="kpbp-150">КПБП-150 (Фторопласт/EPDM, 150°C)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Сечение медных жил <span class="unit">мм²</span></label>
+              <select id="cableCross" onchange="calculateAll()">
+                <option value="10">10 мм² (R=1.83 Ом/км)</option>
+                <option value="16" selected>16 мм² (R=1.15 Ом/км)</option>
+                <option value="25">25 мм² (R=0.727 Ом/км)</option>
+                <option value="35">35 мм² (R=0.524 Ом/км)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Длина кабельной линии <span class="unit">м</span></label>
+              <input type="number" id="cableLength" value="1850" step="10" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Температура на приеме <span class="unit">°C</span></label>
+              <input type="number" id="wellTemp" value="78" step="1" oninput="calculateAll()" />
+            </div>
+          </div>
+
+          <div class="sub-head">3. Силовой трансформатор ТМПН</div>
+          <div class="form-group">
+            <label>Типоразмер ТМПН</label>
+            <select id="tmpnSelect" onchange="calculateAll()">
+              <option value="100">ТМПН-100 / 3 (100 кВА)</option>
+              <option value="160">ТМПН-160 / 3 (160 кВА)</option>
+              <option value="250" selected>ТМПН-250 / 3 (250 кВА)</option>
+              <option value="400">ТМПН-400 / 3 (400 кВА)</option>
+              <option value="630">ТМПН-630 / 3 (630 кВА)</option>
+              <option value="1000">ТМПН-1000 / 3 (1000 кВА)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Напряжение сети на кусте <span class="unit">В</span></label>
+            <input type="number" id="gridVoltage" value="380" step="5" oninput="calculateAll()" />
+          </div>
+        </div>
+
+        <!-- Calculations and Output Right Column -->
+        <div class="space-y-4">
+          <!-- Cable losses & results -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">⚡ Потери в кабельной линии и требуемое напряжение</span>
+              <span class="badge badge-green" id="cableStatusBadge">Норма по току</span>
+            </div>
+
+            <div class="result-box">
+              <div class="result-row">
+                <span class="result-label">Средняя расчетная температура кабеля Tср:</span>
+                <span class="result-val" id="resCableTemp">49.0 °C</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Температурное сопротивление жилы (фазы):</span>
+                <span class="result-val" id="resCableResist">2.38 Ом</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Плотность тока в жиле кабеля j:</span>
+                <span class="result-val" id="resCableDensity">2.13 А/мм²</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Падение напряжения в кабеле ΔUкаб:</span>
+                <span class="result-val highlight" id="resDeltaU">118 В (11.2%)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Активные потери мощности в кабеле ΔP:</span>
+                <span class="result-val" id="resLossPower">8.24 кВт</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Требуемое напряжение на выходе ТМПН (вторичка):</span>
+                <span class="result-val highlight" style="color: #60a5fa" id="resReqU">1168 В</span>
+              </div>
+            </div>
+
+            <div class="callout" id="cableWarningBox">
+              Параметры кабельной линии находятся в допустимых пределах (падение напряжения &lt; 15%, плотность тока &lt; 3.5 А/мм²).
+            </div>
+          </div>
+
+          <!-- 4 Taps of TMPN -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🎛️ Расчёт 4-х ступеней регулировочных отпаек ТМПН</span>
+              <span class="badge badge-blue">Таблица отпаек</span>
+            </div>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Ступень</th>
+                    <th>Напряжение отпайки</th>
+                    <th>Назначение / Режим</th>
+                    <th>Iдоп ТМПН</th>
+                    <th>Запас по U</th>
+                    <th>Статус</th>
+                  </tr>
+                </thead>
+                <tbody id="tapsTableBody">
+                  <!-- Generated via JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sub-head" style="margin-top: 14px;">Резюме подбора ТМПН</div>
+            <div class="result-box">
+              <div class="result-row">
+                <span class="result-label">Коэффициент загрузки ТМПН (kзагр):</span>
+                <span class="result-val" id="resTmpnLoad">32.4% (Оптимально)</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Рекомендованная отпайка в работу:</span>
+                <span class="result-val highlight" id="resSelectedTap">Ступень #2 (1180 В)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Control Station Sizing (SU) -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🏢 Подбор Станции Управления (СУ)</span>
+              <span class="badge badge-amber">Топ-3 СУ</span>
+            </div>
+
+            <div class="result-box">
+              <div class="result-row">
+                <span class="result-label">Расчетный ток первичной цепи СУ (380 В):</span>
+                <span class="result-val highlight" id="resPrimaryCurrent">112 А</span>
+              </div>
+              <div class="result-row">
+                <span class="result-label">Требуемый номин. ток СУ (с запасом 15%):</span>
+                <span class="result-val" id="resRequiredCurrentSU">≥ 129 А</span>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Ранг</th>
+                    <th>Модель СУ</th>
+                    <th>Тип</th>
+                    <th>Iном (А)</th>
+                    <th>Мощность</th>
+                    <th>Запас по току</th>
+                  </tr>
+                </thead>
+                <tbody id="suTableBody">
+                  <!-- Generated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 5: ОХЛАЖДЕНИЕ ПЭД & ГЛУШЕНИЕ СКВАЖИНЫ                -->
+    <!-- ======================================================== -->
+    <div id="tab-cooling-kill" class="tab-content" style="display: none;">
+      <div class="module-grid-equal">
+        
+        <!-- Cooling calculation -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">❄️ Термогидравлический расчет охлаждения ПЭД</span>
+            <span class="badge badge-green" id="resCoolingBadge">Норма охлаждения</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Внутренний диаметр эксплуатационной колонны Dвн <span class="unit">мм</span></label>
+              <input type="number" id="casingId" value="130" step="1" oninput="calculateAll()" />
+            </div>
+            <div class="form-group">
+              <label>Наружный диаметр корпуса ПЭД dпэд <span class="unit">мм</span></label>
+              <select id="pedDiameter" onchange="calculateAll()">
+                <option value="103">103 мм (Габарит 5)</option>
+                <option value="117" selected>117 мм (Габарит 5А)</option>
+                <option value="130">130 мм (Габарит 6)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Наличие кожуха охлаждения (кожух-направитель)</label>
+            <select id="coolingShroud" onchange="calculateAll()">
+              <option value="no" selected>Без кожуха (поток омывает в зазоре колонны)</option>
+              <option value="yes">С кожухом охлаждения (Dвн кожуха = 122 мм)</option>
+            </select>
+          </div>
+
+          <div class="result-box" style="margin-top: 14px;">
+            <div class="result-row">
+              <span class="result-label">Площадь кольцевого сечения для прохода потока:</span>
+              <span class="result-val" id="resAnnulusArea">25.2 см²</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">Фактическая скорость восходящего потока v:</span>
+              <span class="result-val highlight" id="resCoolingSpeed">0.39 м/с</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">Минимально допустимая нормативная скорость:</span>
+              <span class="result-val">≥ 0.10 м/с (≥ 0.15 м/с при W &lt; 50%)</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">Оценка теплового режима ПЭД:</span>
+              <span class="result-val success" id="resCoolingVerdict">Охлаждение достаточное, перегрев исключен</span>
+            </div>
+          </div>
+
+          <div class="callout" id="coolingCallout">
+            Скорость омывания корпуса электродвигателя составляет 0.39 м/с, что превышает минимальный отраслевой регламент (0.10 м/с). Теплоотвод обеспечивается в полном объеме.
+          </div>
+        </div>
+
+        <!-- Well Killing (Глушение) calculation -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🛑 Расчёт параметров глушения скважины</span>
+            <span class="badge badge-blue">Ремонт ПРС / КРС</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Коэффициент запаса по давлению kзап</label>
+              <select id="killSafetyMargin" onchange="calculateAll()">
+                <option value="1.05">1.05 (Запас 5% — до 1200 м)</option>
+                <option value="1.08">1.08 (Запас 8% — 1200..2000 м)</option>
+                <option value="1.10" selected>1.10 (Запас 10% — свыше 2000 м)</option>
+                <option value="1.15">1.15 (Запас 15% — аномально высокое Pпл)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Наружный диаметр НКТ <span class="unit">мм</span></label>
+              <select id="tubingSize" onchange="calculateAll()">
+                <option value="60">60 мм (Внутренний ~50.3 мм)</option>
+                <option value="73" selected>73 мм (Внутренний ~62.0 мм)</option>
+                <option value="89">89 мм (Внутренний ~75.9 мм)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="result-box" style="margin-top: 14px;">
+            <div class="result-row">
+              <span class="result-label">Необходимая плотность жидкости глушения ρглуш:</span>
+              <span class="result-val highlight" id="resKillDensity">1.18 г/см³ (1180 кг/м³)</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">Рекомендованный тип раствора:</span>
+              <span class="result-val" id="resKillFluidType">Раствор соли хлорида натрия (NaCl)</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">Внутренний объем НКТ Vнкт:</span>
+              <span class="result-val" id="resVtubing">5.28 м³</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">Объем затрубного пространства Vзатр:</span>
+              <span class="result-val" id="resVannulus">18.4 м³</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">Полный объем скважины Vполн:</span>
+              <span class="result-val" id="resVtotal">23.7 м³</span>
+            </div>
+            <div class="result-row">
+              <span class="result-label">Потребный объем глушения (с коэффициентом 1.25):</span>
+              <span class="result-val highlight" style="color: #60a5fa" id="resVkillReq">29.6 м³</span>
+            </div>
+          </div>
+
+          <div class="callout">
+            Перед началом спуско-подъемных операций необходимо обеспечить 1.25-кратный объем скважины с контролем выравнивания плотности на выходе.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 6: СВОДНЫЙ ТЕХНОЛОГИЧЕСКИЙ ПРОТОКОЛ                 -->
+    <!-- ======================================================== -->
+    <div id="tab-report" class="tab-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📋 Сводный технологический паспорт-протокол расчета УЭЦН</span>
+          <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">
+            Печать официального протокола
+          </button>
+        </div>
+
+        <div style="margin-bottom: 14px; font-size: 11.5px; color: var(--text-muted); border-bottom: 1px solid var(--card-border); padding-bottom: 10px;">
+          Кустовая площадка: <strong style="color: #fff">Куст #14, скважина 312</strong> | 
+          Дата расчета: <strong style="color: #fff" id="reportDate">Сегодня</strong> | 
+          Инженер-технолог: <strong style="color: #fff">Технолог УЭЦН</strong>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Узел / Модуль</th>
+                <th>Параметр</th>
+                <th>Ед. изм.</th>
+                <th>Значение</th>
+                <th>Норматив / Примечание</th>
+              </tr>
+            </thead>
+            <tbody id="reportTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 7: СПРАВОЧНИК                                       -->
+    <!-- ======================================================== -->
+    <div id="tab-reference" class="tab-content" style="display: none;">
+      <div class="module-grid-equal">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📚 Справочник труб НКТ (ГОСТ 633-80)</span>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Диаметр</th>
+                  <th>Толщина</th>
+                  <th>dвн (мм)</th>
+                  <th>Вес 1 м (кг)</th>
+                  <th>Емкость (л/м)</th>
+                  <th>Qстраг (Д)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>60 мм</td><td>5.0 мм</td><td>50.3 мм</td><td>6.8 кг</td><td>1.99 л/м</td><td>295 кН</td></tr>
+                <tr class="active-row"><td>73 мм</td><td>5.5 мм</td><td>62.0 мм</td><td>9.2 кг</td><td>3.02 л/м</td><td>434 кН</td></tr>
+                <tr><td>89 мм</td><td>6.5 мм</td><td>75.9 мм</td><td>13.2 кг</td><td>4.52 л/м</td><td>585 кН</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📚 Кабели УЭЦН</span>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Сечение</th>
+                  <th>R при 20°C</th>
+                  <th>Iдоп (макс)</th>
+                  <th>Масса 1 км</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>10 мм²</td><td>1.83 Ом/км</td><td>42 А</td><td>480 кг</td></tr>
+                <tr class="active-row"><td>16 мм²</td><td>1.15 Ом/км</td><td>60 А</td><td>670 кг</td></tr>
+                <tr><td>25 мм²</td><td>0.727 Ом/км</td><td>80 А</td><td>980 кг</td></tr>
+                <tr><td>35 мм²</td><td>0.524 Ом/км</td><td>100 А</td><td>1320 кг</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // -------------------------------------------------------------
+    // DATABASE OF CONTROL STATIONS (СУ)
+    // -------------------------------------------------------------
+    const SU_DATABASE = [
+      { name: 'Триол АК-50-160-ЧРП', current: 160, power: 80, type: 'ЧРП (ПЧ)', maker: 'Корпорация Триол' },
+      { name: 'Электон-05-160-ПЧ', current: 160, power: 80, type: 'ЧРП (ПЧ)', maker: 'ЗАО Новомет / Электон' },
+      { name: 'Борец БСП-160', current: 160, power: 90, type: 'ЧРП (ПЧ)', maker: 'ПК Борец' },
+      { name: 'Триол АК-50-250-ЧРП', current: 250, power: 132, type: 'ЧРП (ПЧ)', maker: 'Корпорация Триол' },
+      { name: 'Электон-05-250-ПЧ', current: 250, power: 132, type: 'ЧРП (ПЧ)', maker: 'ЗАО Новомет / Электон' },
+      { name: 'Борец БСП-250', current: 250, power: 132, type: 'ЧРП (ПЧ)', maker: 'ПК Борец' },
+      { name: 'Алнас-ЧРП-250', current: 250, power: 132, type: 'ЧРП (ПЧ)', maker: 'Римера-Алнас' },
+      { name: 'Триол АК-50-400-ЧРП', current: 400, power: 200, type: 'ЧРП (ПЧ)', maker: 'Корпорация Триол' },
+      { name: 'Электон-05-400-ПЧ', current: 400, power: 200, type: 'ЧРП (ПЧ)', maker: 'ЗАО Новомет / Электон' },
+      { name: 'Борец БСП-400', current: 400, power: 220, type: 'ЧРП (ПЧ)', maker: 'ПК Борец' }
+    ];
+
+    // Cable resistance (Ohm/km at 20°C)
+    const CABLE_R20 = {
+      '10': 1.83,
+      '16': 1.15,
+      '25': 0.727,
+      '35': 0.524
+    };
+
+    // Tab switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+      const targetContent = document.getElementById(tabId);
+      if (targetContent) targetContent.style.display = 'block';
+
+      const matchedBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => 
+        b.getAttribute('onclick') && b.getAttribute('onclick').includes(tabId)
+      );
+      if (matchedBtn) matchedBtn.classList.add('active');
+    }
+
+    // Export Print
+    function exportPrint() {
+      switchTab('tab-report');
+      setTimeout(() => window.print(), 200);
+    }
+
+    // Save to localStorage
+    function saveToLocal() {
+      const inputs = document.querySelectorAll('input, select');
+      const state = {};
+      inputs.forEach(el => {
+        if (el.id) state[el.id] = el.value;
+      });
+      localStorage.setItem('esp_calc_v4_state', JSON.stringify(state));
+      alert('✓ Настройки и параметры скважины успешно сохранены в браузере!');
+    }
+
+    // Reset default
+    function loadDefaultPreset() {
+      if (confirm('Сбросить все параметры на эталонные значения?')) {
+        localStorage.removeItem('esp_calc_v4_state');
+        location.reload();
+      }
+    }
+
+    // -------------------------------------------------------------
+    // MAIN CALCULATION FUNCTION
+    // -------------------------------------------------------------
+    function calculateAll() {
+      // -----------------------------------------------------------
+      // MODULE 1: PKV / PV (PERIODIC WELL OPERATION)
+      // -----------------------------------------------------------
+      const pkvQpl = parseFloat(document.getElementById('pkvQplast').value) || 12;
+      const pkvQpump = parseFloat(document.getElementById('pkvQpump').value) || 45;
+      const pkvHstat = parseFloat(document.getElementById('pkvHstat').value) || 850;
+      const pkvHdyn = parseFloat(document.getElementById('pkvHdyn').value) || 1450;
+      const pkvCasingId = parseFloat(document.getElementById('pkvCasingId').value) || 130;
+      const pkvTubingD = parseFloat(document.getElementById('pkvTubingD').value) || 73;
+      const pkvMaxStarts = parseFloat(document.getElementById('pkvMaxStarts').value) || 12;
+      const pkvMinCoolMin = parseFloat(document.getElementById('pkvMinCoolMin').value) || 45;
+
+      const deltaH = Math.max(10, pkvHdyn - pkvHstat);
+      document.getElementById('resPkvDeltaH').innerText = `${deltaH.toFixed(0)} м`;
+
+      // Annular cross section area for fluid accumulation: S = pi/4 * (D_casing^2 - d_tubing_outer^2)
+      const sAnnulus_m2 = (Math.PI / 4) * (Math.pow(pkvCasingId / 1000, 2) - Math.pow(pkvTubingD / 1000, 2));
+      const sAnnulus_l_m = sAnnulus_m2 * 1000; // liters per meter
+      document.getElementById('resPkvAnnulusCap').innerText = `${sAnnulus_l_m.toFixed(2)} л/м (${sAnnulus_m2.toFixed(4)} м³/м)`;
+
+      // Volume accumulated in one cycle:
+      const vCycle = deltaH * sAnnulus_m2;
+      document.getElementById('resPkvVolCycle').innerText = `${vCycle.toFixed(2)} м³`;
+
+      // Rates in m3/hour:
+      const qPl_hour = pkvQpl / 24;
+      const qPump_hour = pkvQpump / 24;
+
+      // Time of accumulation (well is shut-in, pumping off):
+      // T_accum = V_cycle / q_plast
+      const tAccumHours = vCycle / Math.max(0.01, qPl_hour);
+      const tAccumMin = Math.round(tAccumHours * 60);
+      document.getElementById('resPkvTaccum').innerText = `${tAccumHours.toFixed(2)} ч (${tAccumMin} мин)`;
+
+      // Time of pumping (pump is on, liquid level drops from Hstat to Hdyn while reservoir still flows):
+      // V_pumped = V_cycle + q_plast * T_pump = q_pump * T_pump
+      // T_pump = V_cycle / (q_pump - q_plast)
+      const netPumpRateHour = Math.max(0.05, qPump_hour - qPl_hour);
+      const tPumpHours = vCycle / netPumpRateHour;
+      const tPumpMin = Math.round(tPumpHours * 60);
+      document.getElementById('resPkvTpump').innerText = `${tPumpHours.toFixed(2)} ч (${tPumpMin} мин)`;
+
+      // Total cycle period:
+      const tCycleHours = tAccumHours + tPumpHours;
+      document.getElementById('resPkvTtotal').innerText = `${tCycleHours.toFixed(2)} ч`;
+
+      // Cycling factor:
+      const kCycle = tPumpHours / tCycleHours;
+      document.getElementById('resPkvKcycle').innerText = `${kCycle.toFixed(3)} (${(kCycle * 100).toFixed(1)}%)`;
+
+      // Starts per day:
+      const startsPerDay = 24 / tCycleHours;
+      document.getElementById('resPkvStartsPerDay').innerText = `${startsPerDay.toFixed(1)} пуска/сут`;
+
+      // Actual daily rate:
+      const actualDailyQ = pkvQpump * kCycle;
+      document.getElementById('resPkvActualQ').innerText = `${actualDailyQ.toFixed(1)} м³/сут`;
+
+      // Top Summary PKV
+      document.getElementById('sumPkvRatio').innerText = `${tPumpHours.toFixed(1)}ч отк / ${tAccumHours.toFixed(1)}ч пауз`;
+      document.getElementById('sumPkvCycles').innerText = `${startsPerDay.toFixed(1)} циклов/сут`;
+
+      const pkvBadge = document.getElementById('pkvBadge');
+      const pkvCallout = document.getElementById('pkvCallout');
+      if (startsPerDay <= pkvMaxStarts && (tAccumHours * 60) >= pkvMinCoolMin) {
+        pkvBadge.className = 'badge badge-green';
+        pkvBadge.innerText = 'Режим ПКВ оптимален';
+        pkvCallout.className = 'callout success';
+        pkvCallout.innerText = `Программа ПКВ сбалансирована: дебит насоса ${pkvQpump} м³/сут за ${tPumpHours.toFixed(2)} ч откачивает накопившийся столб жидкости (${vCycle.toFixed(2)} м³). Пауза ${tAccumHours.toFixed(2)} ч достаточна для охлаждения ПЭД. Число пусков (${startsPerDay.toFixed(1)}/сут) в пределах допустимого (${pkvMaxStarts}).`;
+      } else {
+        pkvBadge.className = 'badge badge-red';
+        pkvBadge.innerText = 'Превышение числа пусков!';
+        pkvCallout.className = 'callout amber';
+        pkvCallout.innerText = `Внимание! Число пусков (${startsPerDay.toFixed(1)}/сут) велико или время паузы (${tAccumMin} мин) недостаточно. Рекомендуется увеличить депрессию накопления ΔH или уменьшить частоту насоса ЧРП.`;
+      }
+
+      // Populate PKV Settings Table
+      const pkvSettings = [
+        { param: 'Время работы насоса (Tотк / Run time)', unit: 'мин (час)', val: `${tPumpMin} мин (${tPumpHours.toFixed(2)} ч)`, note: 'Уставка таймера работы СУ' },
+        { param: 'Время паузы накопления (Tпауз / Pause time)', unit: 'мин (час)', val: `${tAccumMin} мин (${tAccumHours.toFixed(2)} ч)`, note: 'Уставка таймера паузы СУ' },
+        { param: 'Количество циклов в сутки', unit: 'цикл/сут', val: startsPerDay.toFixed(1), note: 'Допустимо до ' + pkvMaxStarts },
+        { param: 'Коэффициент цикличности (Кц)', unit: 'д.ед.', val: kCycle.toFixed(3), note: 'Доля времени работы насоса' },
+        { param: 'Откачиваемый объём за один цикл', unit: 'м³', val: vCycle.toFixed(2), note: 'Полезный объём накопления' },
+        { param: 'Ожидаемая суточная добыча жидкости', unit: 'м³/сут', val: actualDailyQ.toFixed(1), note: 'Равна дебиту пласта' },
+      ];
+      let pkvHtml = '';
+      pkvSettings.forEach(s => {
+        pkvHtml += `<tr><td><strong>${s.param}</strong></td><td>${s.unit}</td><td style="font-weight: bold; color: #fbbf24">${s.val}</td><td>${s.note}</td></tr>`;
+      });
+      document.getElementById('pkvSettingsTable').innerHTML = pkvHtml;
+
+      // -----------------------------------------------------------
+      // MODULE 2: NKT TUBING CALCULATIONS (МКТ)
+      // -----------------------------------------------------------
+      const nktSize = parseFloat(document.getElementById('nktSizeSelect').value) || 73;
+      const nktSteel = document.getElementById('nktSteelGrade').value;
+      const nktLen = parseFloat(document.getElementById('nktLength').value) || 1750;
+      const nktFlow = parseFloat(document.getElementById('nktFlowQ').value) || 85;
+      const nktVisc = parseFloat(document.getElementById('nktViscosity').value) || 14; // cSt
+      const nktRho = parseFloat(document.getElementById('nktDensity').value) || 980; // kg/m3
+      const nktEspWeight = parseFloat(document.getElementById('nktEspWeight').value) || 1850; // kg
+
+      // Geometry & weight per meter according to GOST 633-80
+      let dInnerMm = 62.0;
+      let dOuterMm = 73.0;
+      let weightPerMeterKg = 9.2;
+      let tensionAllowKn = 434; // D grade default
+
+      if (nktSize === 60) {
+        dInnerMm = 50.3;
+        dOuterMm = 60.3;
+        weightPerMeterKg = 6.8;
+        tensionAllowKn = 295;
+      } else if (nktSize === 89) {
+        dInnerMm = 75.9;
+        dOuterMm = 88.9;
+        weightPerMeterKg = 13.2;
+        tensionAllowKn = 585;
+      }
+
+      // Steel grade multiplier
+      const steelFactors = { 'D': 1.0, 'K': 1.29, 'E': 1.45, 'L': 1.72, 'M': 1.91 };
+      tensionAllowKn = Math.round(tensionAllowKn * (steelFactors[nktSteel] || 1.0));
+
+      document.getElementById('resNktInnerD').innerText = `${dInnerMm.toFixed(1)} мм`;
+
+      // Flow velocity in tubing: v = Q / S
+      const sNktInnerM2 = (Math.PI / 4) * Math.pow(dInnerMm / 1000, 2);
+      const qNktM3s = nktFlow / 86400;
+      const vNkt = qNktM3s / sNktInnerM2;
+      document.getElementById('resNktVelocity').innerText = `${vNkt.toFixed(2)} м/с`;
+
+      // Reynolds number: Re = v * d / nu
+      const kinematicViscM2s = nktVisc * 1e-6; // 1 cSt = 1e-6 m2/s
+      const reynolds = (vNkt * (dInnerMm / 1000)) / kinematicViscM2s;
+      
+      let lambda = 0.035;
+      let flowRegime = 'Ламинарный';
+      if (reynolds < 2320) {
+        lambda = 64 / Math.max(1, reynolds);
+        flowRegime = `Ламинарный (Re = ${Math.round(reynolds)})`;
+      } else {
+        flowRegime = `Турбулентный (Re = ${Math.round(reynolds)})`;
+        // Altshul equation: lambda = 0.11 * (k/d + 68/Re)^0.25, pipe roughness k ~ 0.05 mm
+        const relRoughness = 0.05 / dInnerMm;
+        lambda = 0.11 * Math.pow(relRoughness + (68 / reynolds), 0.25);
+      }
+
+      document.getElementById('nktHydBadge').innerText = flowRegime;
+      document.getElementById('resNktReynolds').innerText = `${Math.round(reynolds)} (${flowRegime})`;
+      document.getElementById('resNktLambda').innerText = lambda.toFixed(4);
+
+      // Head loss Darcy-Weisbach: h_loss = lambda * (L / d) * (v^2 / 2g)
+      const hLossM = lambda * (nktLen / (dInnerMm / 1000)) * (Math.pow(vNkt, 2) / (2 * 9.81));
+      const deltaP_NktAtm = (nktRho * 9.81 * hLossM) / 100000;
+      const deltaP_NktMpa = deltaP_NktAtm * 0.101325;
+
+      document.getElementById('resNktHeadLoss').innerText = `${hLossM.toFixed(1)} м`;
+      document.getElementById('resNktPressLoss').innerText = `${deltaP_NktAtm.toFixed(2)} атм (${deltaP_NktMpa.toFixed(3)} МПа)`;
+
+      // Sand carry assessment: critical velocity for sand suspension ~ 0.5 - 0.8 m/s
+      const sandCarryEl = document.getElementById('resNktSandCarry');
+      if (vNkt >= 0.8) {
+        sandCarryEl.innerText = 'Отличный вынос песка и парафина (v ≥ 0.8 м/с)';
+        sandCarryEl.className = 'result-val success';
+      } else if (vNkt >= 0.5) {
+        sandCarryEl.innerText = 'Удовлетворительный вынос (v = 0.5-0.8 м/с)';
+        sandCarryEl.className = 'result-val warning';
+      } else {
+        sandCarryEl.innerText = 'Риск оседания песка / запарафинивания (v < 0.5 м/с)';
+        sandCarryEl.className = 'result-val danger';
+      }
+
+      // Top Summary NKT
+      document.getElementById('sumNktFriction').innerText = `${deltaP_NktAtm.toFixed(2)} атм`;
+      document.getElementById('sumNktSpeed').innerText = `v = ${vNkt.toFixed(2)} м/с (${nktSize} мм)`;
+
+      // Strength & weight:
+      const pipeWeightAirKg = weightPerMeterKg * nktLen;
+      // Archimedes buoyancy factor: 1 - (rho_fluid / rho_steel), rho_steel ~ 7850 kg/m3
+      const buoyancyFactor = 1 - (nktRho / 7850);
+      const pipeWeightFluidKg = pipeWeightAirKg * buoyancyFactor;
+      const totalTensionKg = pipeWeightFluidKg + nktEspWeight;
+      const totalTensionKn = (totalTensionKg * 9.81) / 1000;
+
+      const tensionAllowKg = (tensionAllowKn * 1000) / 9.81;
+      const safetyFactor = tensionAllowKn / totalTensionKn;
+
+      document.getElementById('resNktWeightAir').innerText = `${Math.round(pipeWeightAirKg)} кг (${((pipeWeightAirKg * 9.81)/1000).toFixed(1)} кН)`;
+      document.getElementById('resNktWeightFluid').innerText = `${Math.round(pipeWeightFluidKg)} кг (${((pipeWeightFluidKg * 9.81)/1000).toFixed(1)} кН)`;
+      document.getElementById('resNktTotalTension').innerText = `${Math.round(totalTensionKg)} кг (${totalTensionKn.toFixed(1)} кН)`;
+      document.getElementById('resNktAllowTension').innerText = `${Math.round(tensionAllowKg)} кг (${tensionAllowKn} кН)`;
+      
+      const sfEl = document.getElementById('resNktSafetyFactor');
+      sfEl.innerText = `${safetyFactor.toFixed(2)} (Норма ≥ 1.50)`;
+      if (safetyFactor >= 1.5) {
+        sfEl.className = 'result-val success';
+        document.getElementById('nktStrengthBadge').className = 'badge badge-green';
+        document.getElementById('nktStrengthBadge').innerText = 'Запас прочности в норме';
+      } else {
+        sfEl.className = 'result-val danger';
+        document.getElementById('nktStrengthBadge').className = 'badge badge-red';
+        document.getElementById('nktStrengthBadge').innerText = 'Опасность обрыва!';
+      }
+
+      // -----------------------------------------------------------
+      // MODULE 3: HYDRAULICS, INFLOW, KPR, GAS
+      // -----------------------------------------------------------
+      const pPlast = parseFloat(document.getElementById('pPlast').value) || 180;
+      const pSat = parseFloat(document.getElementById('pSat').value) || 85;
+      const gasFactor = parseFloat(document.getElementById('gasFactor').value) || 45;
+      const depthPlast = parseFloat(document.getElementById('depthPlast').value) || 2350;
+      const flowRate = parseFloat(document.getElementById('flowRate').value) || 85;
+      const dynLevel = parseFloat(document.getElementById('dynLevel').value) || 1420;
+      const pumpDepth = parseFloat(document.getElementById('pumpDepth').value) || 1750;
+      const pZatr = parseFloat(document.getElementById('pZatr').value) || 14;
+      const pBuf = parseFloat(document.getElementById('pBuf').value) || 18;
+      const waterCut = parseFloat(document.getElementById('waterCut').value) || 65;
+      const oilDensity = parseFloat(document.getElementById('oilDensity').value) || 860;
+      const waterDensity = parseFloat(document.getElementById('waterDensity').value) || 1080;
+      const frequency = parseFloat(document.getElementById('freqSlider').value) || 50;
+
+      const waterFrac = waterCut / 100;
+      const rhoMix = oilDensity * (1 - waterFrac) + waterDensity * waterFrac;
+      document.getElementById('resMixDensity').innerText = `${Math.round(rhoMix)} кг/м³`;
+
+      // Pressure at pump intake Ppr:
+      const liquidColumnH = Math.max(0, pumpDepth - dynLevel);
+      const pColumnLiquid = (rhoMix * 9.81 * liquidColumnH) / 100000;
+      const pPr = pZatr + pColumnLiquid;
+      document.getElementById('resPpr').innerText = `${pPr.toFixed(1)} атм`;
+
+      const deltaSat = pPr - pSat;
+      const resDeltaSatEl = document.getElementById('resDeltaSat');
+      if (deltaSat >= 0) {
+        resDeltaSatEl.innerText = `+${deltaSat.toFixed(1)} атм (Однофазный поток)`;
+        resDeltaSatEl.className = 'result-val success';
+      } else {
+        resDeltaSatEl.innerText = `${deltaSat.toFixed(1)} атм (Двухфазный поток, выделение газа!)`;
+        resDeltaSatEl.className = 'result-val warning';
+      }
+
+      // Bottomhole pressure Pzab:
+      const columnToPlast = Math.max(0, depthPlast - pumpDepth);
+      const pColumnPlast = (rhoMix * 9.81 * columnToPlast) / 100000;
+      const pZab = pPr + pColumnPlast;
+      document.getElementById('resPzab').innerText = `${pZab.toFixed(1)} атм`;
+
+      const depression = Math.max(1, pPlast - pZab);
+      document.getElementById('resDepression').innerText = `${depression.toFixed(1)} атм`;
+
+      const kpr = flowRate / depression;
+      document.getElementById('resKpr').innerText = `${kpr.toFixed(2)} м³/(сут·атм)`;
+
+      const potentialQ = Math.round(kpr * (pPlast - pSat));
+      document.getElementById('resQpot').innerText = `${potentialQ} м³/сут`;
+
+      // Free Gas Fraction Beta:
+      const wellTemp = parseFloat(document.getElementById('wellTemp').value) || 78;
+      let freeGasVol = 0;
+      let betaIn = 0;
+      if (pPr < pSat) {
+        const gasSolubilityIntake = (pPr / pSat) * gasFactor;
+        const gasReleased = Math.max(0, gasFactor - gasSolubilityIntake);
+        const q_gas_std = flowRate * (1 - waterFrac) * gasReleased;
+        const bg = (1 / pPr) * (273 + wellTemp) / 293;
+        freeGasVol = q_gas_std * bg;
+        betaIn = (freeGasVol / (flowRate + freeGasVol)) * 100;
+      }
+      document.getElementById('resFreeGasVol').innerText = `${freeGasVol.toFixed(1)} м³/сут`;
+      document.getElementById('resBetaIn').innerText = `${betaIn.toFixed(1)} %`;
+
+      const gasBadge = document.getElementById('resGasBadge');
+      const gasEquip = document.getElementById('resGasEquip');
+      const gasCallout = document.getElementById('gasCalloutBox');
+      if (betaIn < 10) {
+        gasBadge.className = 'badge badge-green';
+        gasBadge.innerText = 'Газ в норме (<10%)';
+        gasEquip.innerText = 'Штатный входной модуль (сетка)';
+        gasCallout.innerText = `Газосодержание ${betaIn.toFixed(1)}% низкое. Срыв подачи исключен, стандартный входной модуль УЭЦН работает стабильно.`;
+      } else if (betaIn < 25) {
+        gasBadge.className = 'badge badge-amber';
+        gasBadge.innerText = 'Умеренный газ (10-25%)';
+        gasEquip.innerText = 'Газосепаратор центробежный МН-ГС5';
+        gasCallout.innerText = `Газосодержание ${betaIn.toFixed(1)}% умеренное. Рекомендуется газосепаратор центробежного типа для предотвращения провалов напора.`;
+      } else {
+        gasBadge.className = 'badge badge-red';
+        gasBadge.innerText = 'Высокий газ (>25%)';
+        gasEquip.innerText = 'Диспергатор + Газосепаратор (МН-ГСД)';
+        gasCallout.innerText = `Внимание! Высокое газосодержание ${betaIn.toFixed(1)}%. Необходима компоновка с газосепаратором-диспергатором или насос в антигазовом исполнении (ЭЦНГД).`;
+      }
+
+      // VFD Similarity:
+      const freqRatio = frequency / 50;
+      const scaledQ = flowRate * freqRatio;
+      const baseHead = dynLevel + Math.round((pBuf * 100000) / (rhoMix * 9.81));
+      const scaledH = Math.round(baseHead * Math.pow(freqRatio, 2));
+      const pedPower = parseFloat(document.getElementById('pedPower').value) || 45;
+      const scaledN = (pedPower * Math.pow(freqRatio, 3)).toFixed(1);
+
+      document.getElementById('resFreqBadge').innerText = `f = ${frequency} Гц`;
+      document.getElementById('resFreqQ').innerText = `${scaledQ.toFixed(1)} м³/сут`;
+      document.getElementById('resFreqH').innerText = `${scaledH} м`;
+      document.getElementById('resFreqP').innerText = `${scaledN} кВт`;
+
+      // -----------------------------------------------------------
+      // MODULE 4: ELECTRICAL COMPLEX (CABLE, TMPN, SU)
+      // -----------------------------------------------------------
+      const pedCurrent = parseFloat(document.getElementById('pedCurrent').value) || 34;
+      const pedVoltage = parseFloat(document.getElementById('pedVoltage').value) || 1050;
+      const pedCosPhi = parseFloat(document.getElementById('pedCosPhi').value) || 0.84;
+      const cableCross = document.getElementById('cableCross').value;
+      const cableLength = parseFloat(document.getElementById('cableLength').value) || 1850;
+      const tmpnKva = parseFloat(document.getElementById('tmpnSelect').value) || 250;
+      const gridVoltage = parseFloat(document.getElementById('gridVoltage').value) || 380;
+
+      const tWellHead = 20;
+      const tAvgCable = (tWellHead + wellTemp) / 2;
+      document.getElementById('resCableTemp').innerText = `${tAvgCable.toFixed(1)} °C`;
+
+      const r20 = CABLE_R20[cableCross] || 1.15;
+      const alphaCu = 0.00426;
+      const r_phase_per_km = r20 * (1 + alphaCu * (tAvgCable - 20));
+      const r_total_phase = r_phase_per_km * (cableLength / 1000);
+      document.getElementById('resCableResist').innerText = `${r_total_phase.toFixed(2)} Ом`;
+
+      const crossNum = parseFloat(cableCross) || 16;
+      const currentDensity = pedCurrent / crossNum;
+      document.getElementById('resCableDensity').innerText = `${currentDensity.toFixed(2)} А/мм²`;
+
+      // Delta U cable
+      const x_phase = 0.08 * (cableLength / 1000);
+      const sinPhi = Math.sqrt(Math.max(0, 1 - Math.pow(pedCosPhi, 2)));
+      const deltaU = Math.sqrt(3) * pedCurrent * (r_total_phase * pedCosPhi + x_phase * sinPhi);
+      const deltaU_pct = (deltaU / pedVoltage) * 100;
+      document.getElementById('resDeltaU').innerText = `${Math.round(deltaU)} В (${deltaU_pct.toFixed(1)}%)`;
+
+      const deltaP_kw = (3 * Math.pow(pedCurrent, 2) * r_total_phase) / 1000;
+      document.getElementById('resLossPower').innerText = `${deltaP_kw.toFixed(2)} кВт`;
+
+      const reqU_sec = Math.round(pedVoltage + deltaU);
+      document.getElementById('resReqU').innerText = `${reqU_sec} В`;
+
+      // 4 Taps of TMPN
+      const baseTapU = Math.round(reqU_sec / 20) * 20;
+      const taps = [
+        { num: 1, u: baseTapU - 60, role: 'Пониженное U (сеть > 400 В)', label: 'Ступень 1 (-5%)' },
+        { num: 2, u: baseTapU, role: 'Основная (Расчетная норма)', label: 'Ступень 2 (Норма)' },
+        { num: 3, u: baseTapU + 60, role: 'Повышенное U (запас на сеть)', label: 'Ступень 3 (+5%)' },
+        { num: 4, u: baseTapU + 120, role: 'Максимальная (тяжелый пуск)', label: 'Ступень 4 (+10%)' },
+      ];
+
+      let tapsHtml = '';
+      let recommendedTapName = `Ступень 2 — ${baseTapU} В`;
+
+      taps.forEach(tap => {
+        const tapU = tap.u;
+        const iAllow = Math.round((tmpnKva * 1000) / (Math.sqrt(3) * tapU));
+        const marginU = Math.round(((tapU - reqU_sec) / reqU_sec) * 100);
+        const isOptimal = tap.num === 2;
+        if (isOptimal) recommendedTapName = `${tap.label} — ${tapU} В`;
+
+        tapsHtml += `
+          <tr class="${isOptimal ? 'active-row' : ''}">
+            <td><strong>#${tap.num}</strong></td>
+            <td><strong style="color: #60a5fa">${tapU} В</strong></td>
+            <td>${tap.role}</td>
+            <td>${iAllow} А</td>
+            <td>${marginU >= 0 ? '+' : ''}${marginU}%</td>
+            <td><span class="badge ${isOptimal ? 'badge-green' : 'badge-blue'}">${isOptimal ? 'РЕКОМЕНДОВАНА' : 'Резерв'}</span></td>
+          </tr>
+        `;
+      });
+      document.getElementById('tapsTableBody').innerHTML = tapsHtml;
+
+      const apparentPowerKva = (Math.sqrt(3) * reqU_sec * pedCurrent) / 1000;
+      const tmpnLoadPct = (apparentPowerKva / tmpnKva) * 100;
+      document.getElementById('resTmpnLoad').innerText = `${tmpnLoadPct.toFixed(1)}% (${tmpnLoadPct > 90 ? 'Перегрузка!' : tmpnLoadPct < 40 ? 'Недогружен' : 'Оптимально'})`;
+      document.getElementById('resSelectedTap').innerText = recommendedTapName;
+
+      // SU Sizing:
+      const primaryCurrent = (apparentPowerKva * 1000) / (Math.sqrt(3) * gridVoltage);
+      const reqCurrentSU = primaryCurrent * 1.15;
+      document.getElementById('resPrimaryCurrent').innerText = `${Math.round(primaryCurrent)} А (при 380 В)`;
+      document.getElementById('resRequiredCurrentSU').innerText = `≥ ${Math.round(reqCurrentSU)} А`;
+
+      const filteredSU = SU_DATABASE
+        .map(su => {
+          const margin = ((su.current - primaryCurrent) / primaryCurrent) * 100;
+          return { ...su, margin };
+        })
+        .filter(su => su.current >= primaryCurrent)
+        .sort((a, b) => a.current - b.current)
+        .slice(0, 3);
+
+      let suRowsHtml = '';
+      filteredSU.forEach((su, idx) => {
+        suRowsHtml += `
+          <tr class="${idx === 0 ? 'active-row' : ''}">
+            <td><strong>ТОП-${idx + 1}</strong></td>
+            <td><strong>${su.name}</strong><br><span style="font-size: 10px; color: var(--text-muted)">${su.maker}</span></td>
+            <td><span class="badge badge-blue">${su.type}</span></td>
+            <td><strong>${su.current} А</strong></td>
+            <td>${su.power} кВт</td>
+            <td><span class="badge ${su.margin < 15 ? 'badge-amber' : 'badge-green'}">+${Math.round(su.margin)}%</span></td>
+          </tr>
+        `;
+      });
+      document.getElementById('suTableBody').innerHTML = suRowsHtml || '<tr><td colspan="6">Требуется СУ на ток свыше 400 А</td></tr>';
+
+      // -----------------------------------------------------------
+      // MODULE 5: COOLING & WELL KILLING
+      // -----------------------------------------------------------
+      const casingId = parseFloat(document.getElementById('casingId').value) || 130;
+      const pedDiameter = parseFloat(document.getElementById('pedDiameter').value) || 117;
+      const coolingShroud = document.getElementById('coolingShroud').value === 'yes';
+
+      const casingInternalD = coolingShroud ? 122 : casingId;
+      const s_annulus_cool_m2 = (Math.PI / 4) * (Math.pow(casingInternalD / 1000, 2) - Math.pow(pedDiameter / 1000, 2));
+      const s_annulus_cool_cm2 = s_annulus_cool_m2 * 10000;
+      const q_m3_s = scaledQ / 86400;
+      const velocity = q_m3_s / s_annulus_cool_m2;
+
+      document.getElementById('resAnnulusArea').innerText = `${s_annulus_cool_cm2.toFixed(1)} см²`;
+      document.getElementById('resCoolingSpeed').innerText = `${velocity.toFixed(2)} м/с`;
+
+      const coolingBadge = document.getElementById('resCoolingBadge');
+      const coolingVerdict = document.getElementById('resCoolingVerdict');
+      const coolingCallout = document.getElementById('coolingCallout');
+      const minRequiredVelocity = waterCut > 50 ? 0.10 : 0.15;
+
+      if (velocity >= minRequiredVelocity) {
+        coolingBadge.className = 'badge badge-green';
+        coolingBadge.innerText = 'Норма охлаждения';
+        coolingVerdict.className = 'result-val success';
+        coolingVerdict.innerText = `Скорость ${velocity.toFixed(2)} м/с достаточна (≥ ${minRequiredVelocity} м/с)`;
+        coolingCallout.className = 'callout success';
+        coolingCallout.innerText = `Охлаждение ПЭД надежное: при дебите ${scaledQ.toFixed(1)} м³/сут скорость омывания электродвигателя составляет ${velocity.toFixed(2)} м/с, что обеспечивает нормативный теплоотвод.`;
+      } else {
+        coolingBadge.className = 'badge badge-red';
+        coolingBadge.innerText = 'Риск перегрева ПЭД!';
+        coolingVerdict.className = 'result-val danger';
+        coolingVerdict.innerText = `Скорость ${velocity.toFixed(2)} м/с НИЖЕ нормы (${minRequiredVelocity} м/с)!`;
+        coolingCallout.className = 'callout amber';
+        coolingCallout.innerText = `Внимание! Низкая скорость омывания электродвигателя (${velocity.toFixed(2)} м/с). Необходима установка кожуха охлаждения (кожух-направитель потока) для уменьшения зазора.`;
+      }
+
+      // Well killing:
+      const killSafety = parseFloat(document.getElementById('killSafetyMargin').value) || 1.10;
+      const tubingSize = parseFloat(document.getElementById('tubingSize').value) || 73;
+      const rhoKill_g_cm3 = (10 * pPlast * killSafety) / depthPlast;
+      const rhoKill_kg_m3 = Math.round(rhoKill_g_cm3 * 1000);
+      document.getElementById('resKillDensity').innerText = `${rhoKill_g_cm3.toFixed(2)} г/см³ (${rhoKill_kg_m3} кг/м³)`;
+
+      let fluidType = 'Техническая вода (1.00 г/см³)';
+      if (rhoKill_g_cm3 > 1.02 && rhoKill_g_cm3 <= 1.18) {
+        fluidType = 'Водный раствор хлорида натрия (NaCl)';
+      } else if (rhoKill_g_cm3 > 1.18 && rhoKill_g_cm3 <= 1.36) {
+        fluidType = 'Водный раствор хлорида кальция (CaCl₂)';
+      } else if (rhoKill_g_cm3 > 1.36) {
+        fluidType = 'Тяжелый солевой раствор (CaCl₂ + CaBr₂)';
+      }
+      document.getElementById('resKillFluidType').innerText = fluidType;
+
+      const tubingInternalD = tubingSize === 60 ? 0.0503 : tubingSize === 73 ? 0.0620 : 0.0759;
+      const vTubing = (Math.PI / 4) * Math.pow(tubingInternalD, 2) * pumpDepth;
+      const casingInternalM = casingId / 1000;
+      const tubingOuterM = tubingSize / 1000;
+      const vAnnulus = (Math.PI / 4) * (Math.pow(casingInternalM, 2) - Math.pow(tubingOuterM, 2)) * pumpDepth;
+      const vBelowPump = (Math.PI / 4) * Math.pow(casingInternalM, 2) * Math.max(0, depthPlast - pumpDepth);
+      const vTotalWell = vTubing + vAnnulus + vBelowPump;
+      const vKillReq = vTotalWell * 1.25;
+
+      document.getElementById('resVtubing').innerText = `${vTubing.toFixed(2)} м³`;
+      document.getElementById('resVannulus').innerText = `${vAnnulus.toFixed(2)} м³`;
+      document.getElementById('resVtotal').innerText = `${vTotalWell.toFixed(1)} м³`;
+      document.getElementById('resVkillReq').innerText = `${vKillReq.toFixed(1)} м³ (запас 1.25)`;
+
+      // -----------------------------------------------------------
+      // SUMMARY BANNER POPULATION
+      // -----------------------------------------------------------
+      document.getElementById('sumPpr').innerText = `${pPr.toFixed(1)} атм`;
+      document.getElementById('sumPprStatus').innerText = deltaSat >= 0 ? `Выше Pнас (+${deltaSat.toFixed(1)})` : `Ниже Pнас (${deltaSat.toFixed(1)})`;
+
+      document.getElementById('sumGas').innerText = `${betaIn.toFixed(1)} %`;
+      document.getElementById('sumGasStatus').innerText = betaIn < 25 ? 'В норме' : 'Требует газосепаратор';
+
+      document.getElementById('sumTap').innerText = `${recommendedTapName.split('—')[1] || '1180 В'}`;
+      document.getElementById('sumTapSub').innerText = `ΔUкаб: ${Math.round(deltaU)} В (${deltaU_pct.toFixed(1)}%)`;
+
+      document.getElementById('sumSU').innerText = filteredSU[0] ? filteredSU[0].name.split('(')[0] : 'СУ-160';
+      document.getElementById('sumSUSub').innerText = filteredSU[0] ? `Запас: +${Math.round(filteredSU[0].margin)}%` : 'Запас 15%';
+
+      // -----------------------------------------------------------
+      // MODULE 6: MASTER REPORT TABLE
+      // -----------------------------------------------------------
+      const reportRows = [
+        { cat: 'Режим ПКВ / ПВ', param: 'Период откачки (работа насоса Tотк)', unit: 'ч (мин)', val: `${tPumpHours.toFixed(2)} ч (${tPumpMin} мин)`, norm: 'По программе' },
+        { cat: 'Режим ПКВ / ПВ', param: 'Период накопления (пауза ПЭД Tпауз)', unit: 'ч (мин)', val: `${tAccumHours.toFixed(2)} ч (${tAccumMin} мин)`, norm: 'Остывание ПЭД' },
+        { cat: 'Режим ПКВ / ПВ', param: 'Число пусков в сутки', unit: 'пуск/сут', val: startsPerDay.toFixed(1), norm: '≤ ' + pkvMaxStarts },
+        { cat: 'Колонна НКТ', param: 'Потери давления на трение ΔPтр', unit: 'атм', val: deltaP_NktAtm.toFixed(2), norm: 'По формуле Альтшуля' },
+        { cat: 'Колонна НКТ', param: 'Скорость восходящего потока в НКТ', unit: 'м/с', val: vNkt.toFixed(2), norm: 'Норма выноса ≥ 0.5 м/с' },
+        { cat: 'Колонна НКТ', param: 'Запас прочности на страгивание kзап', unit: 'д.ед.', val: safetyFactor.toFixed(2), norm: '≥ 1.50' },
+        { cat: 'Пласт и забой', param: 'Забойное давление Pзаб', unit: 'атм', val: pZab.toFixed(1), norm: 'Расчетное' },
+        { cat: 'Пласт и забой', param: 'Коэффициент продуктивности Кпр', unit: 'м³/(сут·атм)', val: kpr.toFixed(2), norm: 'Индикаторный' },
+        { cat: 'Прием насоса', param: 'Давление на приеме Pпр', unit: 'атм', val: pPr.toFixed(1), norm: '≥ 25 атм' },
+        { cat: 'Прием насоса', param: 'Газосодержание на приеме βвх', unit: '%', val: betaIn.toFixed(1), norm: '< 25%' },
+        { cat: 'Электрокомплекс', param: 'Падение напряжения в кабеле ΔU', unit: 'В (%)', val: `${Math.round(deltaU)} (${deltaU_pct.toFixed(1)}%)`, norm: '≤ 15%' },
+        { cat: 'Электрокомплекс', param: 'Рекомендуемая отпайка ТМПН', unit: 'В', val: recommendedTapName, norm: 'Ступень 2' },
+        { cat: 'Электрокомплекс', param: 'Рекомендованная СУ', unit: '-', val: filteredSU[0] ? filteredSU[0].name : 'СУ 160А', norm: 'С запасом по току' },
+        { cat: 'Охлаждение ПЭД', param: 'Скорость омывания корпуса электродвигателя', unit: 'м/с', val: velocity.toFixed(2), norm: '≥ ' + minRequiredVelocity + ' м/с' },
+        { cat: 'Глушение', param: 'Плотность жидкости глушения', unit: 'г/см³', val: rhoKill_g_cm3.toFixed(2), norm: 'kзап = ' + killSafety },
+        { cat: 'Глушение', param: 'Потребный объем глушения (1.25V)', unit: 'м³', val: vKillReq.toFixed(1), norm: 'НКТ + затруб' },
+      ];
+
+      let reportHtml = '';
+      reportRows.forEach(r => {
+        reportHtml += `
+          <tr>
+            <td><strong>${r.cat}</strong></td>
+            <td>${r.param}</td>
+            <td style="font-family: var(--font-mono)">${r.unit}</td>
+            <td style="font-family: var(--font-mono); font-weight: bold; color: #60a5fa">${r.val}</td>
+            <td style="color: var(--text-muted)">${r.norm}</td>
+          </tr>
+        `;
+      });
+      document.getElementById('reportTableBody').innerHTML = reportHtml;
+      document.getElementById('reportDate').innerText = new Date().toLocaleDateString('ru-RU');
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('esp_calc_v4_state');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          Object.keys(parsed).forEach(k => {
+            const el = document.getElementById(k);
+            if (el) el.value = parsed[k];
+          });
+        } catch(e) {}
+      }
+      calculateAll();
+    });
+  </script>
+</body>
+</html>
